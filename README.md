@@ -62,7 +62,7 @@ curl -sL https://github.com/tresorit/ZeroKit-Realm-auth-provider/raw/master/inst
 ```
 **Notice:** if you need more help or want to install it manually, you can find more detailed description in the module's repository on GitHub
 
-The script will automatically install the module and will produce a code snippet which should be inserted into the configuration file of ROS in the "auth" section.
+The script will automatically install the module and will produce a code snippet which should be inserted into the configuration file of ROS in the **"auth"** section.
 
 > Realm Object Server's config file is can be found at this location, according ot your platform:
   >   - On linux: /etc/realm/configuration.yml
@@ -128,6 +128,10 @@ The tenant settings are the settings from the ZeroKit management portal (from th
 After the deployment finished (about 5 minutes), please find and open the configuration page of the web app. In the "Application settings" tab you can change the settings of the server any time.
 
 ![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/azure-webapp-config.png)
+
+On the "Overview" tab you can find the address of your new web app. Please note that this app is a backend API for applications, so if you navigate to the given address from a browser the app will always produce a 404 Not found error, which is not an error, this is the expected behavior.
+
+![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/azure-webapp-overview.png)
 
 ## Configure and build mobile applications
 Last step is to check out, configure and build the mobile applications. You can find the platform-specific guide on the following links:
