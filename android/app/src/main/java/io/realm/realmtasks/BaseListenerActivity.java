@@ -12,10 +12,6 @@ import io.realm.realmtasks.model.User;
 
 import static io.realm.realmtasks.model.User.FIELD_REALMUSERID;
 
-/**
- * Created by angeli on 2017. 05. 12..
- */
-
 public class BaseListenerActivity extends AppCompatActivity {
 
     private Realm realmInvitationPublic;

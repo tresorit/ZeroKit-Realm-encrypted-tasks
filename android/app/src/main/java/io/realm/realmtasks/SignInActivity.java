@@ -211,47 +211,66 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
                     realm.insert(new PermissionChange(REALM_URL_INVITES_PUBLIC_MY, "*", true, true, false));
             });
         }
-
         setUpZerokit(() -> {
             try (Realm realmDefault = Realm.getInstance(getSyncConfigurationForTasks())) {
                 if (realmDefault.where(TaskListList.class).count() == 0) {
-                    Zerokit.getInstance().createTresor().enqueue(tresorId ->
-                            AdminApi.getInstance().createdTresor(tresorId).enqueue(res -> {
-                                try (Realm realm = Realm.getInstance(getSyncConfigurationForTasks())) {
-                                    realm.executeTransaction(realm1 -> realm1.createObject(TaskListList.class, tresorId));
-                                }
-                                actionSuccess.call();
-                            }, onFailAdminApi), onFailZerokit);
-                } else actionSuccess.call();
+                    Zerokit.getInstance().createTresor().enqueue(tresorId -> {
+                        AdminApi.getInstance().createdTresor(tresorId).enqueue(res -> {
+                            try (Realm realm = Realm.getInstance(getSyncConfigurationForTasks())) {
+                                realm.executeTransaction(realm1 -> realm1.createObject(TaskListList.class, tresorId));
+                            }
+                            actionSuccess.call();
+                        }, onFailAdminApi);
+                    }, onFailZerokit);
+                } else {
+                    actionSuccess.call();
+                }
             }
         });
     }
 
-    private void setUpZerokit(Callback callback){
+    private void setUpZerokit(Callback callback) {
         final AdminApi adminApi = AdminApi.getInstance();
         final Zerokit zerokit = Zerokit.getInstance();
-        if (adminApi.getToken() == null || UserManager.getCurrentUser() == null)
-        zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(identityTokens ->
+        if (adminApi.getToken() == null) {
+            zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(identityTokens -> {
                 adminApi.login(identityTokens.getAuthorizationCode()).enqueue(responseAdminLogin -> {
                     adminApi.setToken(responseAdminLogin.getId());
-                    zerokit.whoAmI().enqueue(zerokitUserId ->
-                            adminApi.getPublicProfile(zerokitUserId).enqueue(publicProfile ->
-                                    adminApi.getProfile().enqueue(profile -> {
-                                        String realmUserId = SyncUser.currentUser().getIdentity();
-                                        UserManager.setCurrentUser(new User(realmUserId, zerokitUserId, new JSONObject(profile).getString("alias")));
-                                        JSONObject jsonObject = new JSONObject(publicProfile);
-                                        if (TextUtils.isEmpty(jsonObject.getString(FIELD_REALMUSERID))) {
-                                            jsonObject.put(FIELD_REALMUSERID, realmUserId);
-                                            adminApi.storePublicProfile(jsonObject.toString()).enqueue(res ->
-                                                    callback.call(), onFailAdminApi);
-                                        } else
-                                            callback.call();
-                                    }, onFailAdminApi), onFailAdminApi), onFailZerokit);
-                }, onFailAdminApi), onFailZerokit);
-        else callback.call();
+                    setUpProfile(callback);
+                }, onFailAdminApi);
+            }, onFailZerokit);
+        } else {
+            setUpProfile(callback);
+        }
     }
 
-    private interface Callback{
+    private void setUpProfile(Callback callback) {
+        final AdminApi adminApi = AdminApi.getInstance();
+        final Zerokit zerokit = Zerokit.getInstance();
+        if (UserManager.getCurrentUser() == null) {
+            zerokit.whoAmI().enqueue(zerokitUserId -> {
+                adminApi.getPublicProfile(zerokitUserId).enqueue(publicProfile -> {
+                    adminApi.getProfile().enqueue(profile -> {
+                        String realmUserId = SyncUser.currentUser().getIdentity();
+                        UserManager.setCurrentUser(new User(realmUserId, zerokitUserId, new JSONObject(profile).getString("alias")));
+                        JSONObject jsonObject = new JSONObject(publicProfile);
+                        if (TextUtils.isEmpty(jsonObject.getString(FIELD_REALMUSERID))) {
+                            jsonObject.put(FIELD_REALMUSERID, realmUserId);
+                            adminApi.storePublicProfile(jsonObject.toString()).enqueue(res -> {
+                                callback.call();
+                            }, onFailAdminApi);
+                        } else {
+                            callback.call();
+                        }
+                    }, onFailAdminApi);
+                }, onFailAdminApi);
+            }, onFailZerokit);
+        } else {
+            callback.call();
+        }
+    }
+
+    private interface Callback {
         void call();
     }
 

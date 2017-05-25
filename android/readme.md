@@ -28,10 +28,10 @@ In the `src/main/AndroidManifest.xml` set the values for `com.tresorit.zerokitsd
      android:value="YOUR API ROOT HERE (eg. https://yourtenant.api.tresorit.io)"/>
 ```
 
-In the `app/src/main/assets/zerokit.properties` set the values of `adminkey` and `adminuserid`. If this file does not exist, let’s create one with the same name.
+In the `app/src/main/assets/zerokit.properties` set the values of `clientid` and `appbackend`. If this file does not exist, let’s create one with the same name.
 ```
 clientid={client id for your openid}
-appbackend={url of the sample application backend}
+appbackend={url of the sample application backend e.g. http://10.0.2.2:3000}
 ```
 
 - `apiroot`: This is your tenant's service URL. You can find this URL on the management portal.
@@ -45,8 +45,8 @@ In the `app/build.gradle` configure the **IP address** and **port** for your **R
 ```xml
 buildTypes {
     ... {
-        buildConfigField "String", "OBJECT_SERVER_IP", "\"YOUR OBJECT SERVER IP HERE\""
-        buildConfigField "int", "OBJECT_SERVER_PORT", "YOUR OBJECT SERVER PORT HERE"
+        buildConfigField "String", "OBJECT_SERVER_IP", "\"YOUR OBJECT SERVER IP HERE e.g. 10.0.100.10\""
+        buildConfigField "int", "OBJECT_SERVER_PORT", "YOUR OBJECT SERVER PORT HERE e.g. 9080"
     }
     ...
 }

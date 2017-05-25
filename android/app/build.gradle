@@ -20,8 +20,8 @@ android {
     }
     buildTypes {
         all{
-            buildConfigField "String", "OBJECT_SERVER_IP", "\"YOUR OBJECT SERVER IP HERE\""
-            buildConfigField "int", "OBJECT_SERVER_PORT", "YOUR OBJECT SERVER PORT HERE"
+            buildConfigField "String", "OBJECT_SERVER_IP", "\"YOUR OBJECT SERVER IP HERE e.g. 10.0.100.10\""
+            buildConfigField "int", "OBJECT_SERVER_PORT", "YOUR OBJECT SERVER PORT HERE e.g. 9080"
         }
         debug {
         }

@@ -18,10 +18,6 @@ import io.realm.realmtasks.R;
 
 import static android.text.TextUtils.isEmpty;
 
-/**
- * Created by angeli on 2017. 03. 09..
- */
-
 public abstract class ZerokitAuth {
 
     private final Action<ResponseAdminApiError> onFailAdminApi;
@@ -57,18 +53,25 @@ public abstract class ZerokitAuth {
                 .put("canCreateTresor", true)
                 .put("alias", username)
                 .toString();
-        adminApi.initReg(username, profileData).enqueue(respInitReg ->
-                zerokit.register(respInitReg.getUserId(), respInitReg.getRegSessionId(), password.getBytes()).enqueue(respReg ->
-                        adminApi.finishReg(respInitReg.getUserId(), respReg.getRegValidationVerifier()).enqueue(aVoid ->
-                                login(username, password), onFailAdminApi), onFailZerokit), onFailAdminApi);
+        adminApi.initReg(username, profileData).enqueue(respInitReg -> {
+            zerokit.register(respInitReg.getUserId(), respInitReg.getRegSessionId(), password.getBytes()).enqueue(respReg -> {
+                adminApi.finishReg(respInitReg.getUserId(), respReg.getRegValidationVerifier()).enqueue(aVoid -> {
+                    login(username, password);
+                }, onFailAdminApi);
+            }, onFailZerokit);
+        }, onFailAdminApi);
     }
 
     private void login(final String username, final String password) {
         final Zerokit zerokit = Zerokit.getInstance();
         final AdminApi adminApi = AdminApi.getInstance();
-        adminApi.getUserId(username).enqueue(s ->
-                zerokit.login(s, password.getBytes()).enqueue(resp ->
-                        zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(this::onRegistrationComplete, onFailZerokit), onFailZerokit), onFailAdminApi);
+        adminApi.getUserId(username).enqueue(s -> {
+            zerokit.login(s, password.getBytes()).enqueue(resp -> {
+                zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(result -> {
+                    onRegistrationComplete(result);
+                }, onFailZerokit);
+            }, onFailZerokit);
+        }, onFailAdminApi);
     }
 
     private boolean needToCancel(final AutoCompleteTextView usernameView, final EditText passwordView, final EditText passwordConfirmationView) {
