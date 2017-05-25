@@ -28,7 +28,7 @@ In the `src/main/AndroidManifest.xml` set the values for `com.tresorit.zerokitsd
      android:value="YOUR API ROOT HERE (eg. https://yourtenant.api.tresorit.io)"/>
 ```
 
-In the `app/src/main/assets/zerokit.properties` set the values of `adminkey` and `adminuserid`. If this file does not exist, let’s create one with the same name.
+In the `app/src/main/assets/zerokit.properties` set the values of `clientid` and `appbackend`. If this file does not exist, let’s create one with the same name.
 ```
 clientid={client id for your openid}
 appbackend={url of the sample application backend}

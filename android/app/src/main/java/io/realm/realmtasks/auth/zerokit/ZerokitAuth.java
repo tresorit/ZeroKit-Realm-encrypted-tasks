@@ -15,15 +15,13 @@ import com.tresorit.zerokit.response.ResponseZerokitError;
 import com.tresorit.zerokit.util.JSONObject;
 
 import io.realm.realmtasks.R;
+import io.realm.realmtasks.util.TimingLogger;
 
 import static android.text.TextUtils.isEmpty;
 
-/**
- * Created by angeli on 2017. 03. 09..
- */
-
 public abstract class ZerokitAuth {
 
+    public static final String TAG = "TIMING";
     private final Action<ResponseAdminApiError> onFailAdminApi;
     private final Action<ResponseZerokitError> onFailZerokit;
 
@@ -50,6 +48,7 @@ public abstract class ZerokitAuth {
     }
 
     private void register(final String username, final String password) {
+        TimingLogger timing = new TimingLogger(TAG, "Registration");
         AdminApi adminApi = AdminApi.getInstance();
         Zerokit zerokit = Zerokit.getInstance();
         String profileData = new JSONObject()
@@ -57,18 +56,34 @@ public abstract class ZerokitAuth {
                 .put("canCreateTresor", true)
                 .put("alias", username)
                 .toString();
-        adminApi.initReg(username, profileData).enqueue(respInitReg ->
-                zerokit.register(respInitReg.getUserId(), respInitReg.getRegSessionId(), password.getBytes()).enqueue(respReg ->
-                        adminApi.finishReg(respInitReg.getUserId(), respReg.getRegValidationVerifier()).enqueue(aVoid ->
-                                login(username, password), onFailAdminApi), onFailZerokit), onFailAdminApi);
+        adminApi.initReg(username, profileData).enqueue(respInitReg -> {
+            timing.addSplit("initReg");
+            zerokit.register(respInitReg.getUserId(), respInitReg.getRegSessionId(), password.getBytes()).enqueue(respReg -> {
+                timing.addSplit("register");
+                adminApi.finishReg(respInitReg.getUserId(), respReg.getRegValidationVerifier()).enqueue(aVoid -> {
+                    timing.addSplit("finishReg");
+                    timing.dumpToLog();
+                    login(username, password);
+                }, onFailAdminApi);
+            }, onFailZerokit);
+        }, onFailAdminApi);
     }
 
     private void login(final String username, final String password) {
+        TimingLogger timing = new TimingLogger(TAG, "Login zerokit");
         final Zerokit zerokit = Zerokit.getInstance();
         final AdminApi adminApi = AdminApi.getInstance();
-        adminApi.getUserId(username).enqueue(s ->
-                zerokit.login(s, password.getBytes()).enqueue(resp ->
-                        zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(this::onRegistrationComplete, onFailZerokit), onFailZerokit), onFailAdminApi);
+        adminApi.getUserId(username).enqueue(s -> {
+            timing.addSplit("getUserId");
+            zerokit.login(s, password.getBytes()).enqueue(resp -> {
+                timing.addSplit("login zerokit");
+                zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(result -> {
+                    timing.addSplit("getIdentityTokens");
+                    timing.dumpToLog();
+                    onRegistrationComplete(result);
+                }, onFailZerokit);
+            }, onFailZerokit);
+        }, onFailAdminApi);
     }
 
     private boolean needToCancel(final AutoCompleteTextView usernameView, final EditText passwordView, final EditText passwordConfirmationView) {

@@ -50,6 +50,7 @@ import io.realm.realmtasks.auth.zerokit.ZerokitAuth;
 import io.realm.realmtasks.model.TaskListList;
 import io.realm.realmtasks.model.User;
 import io.realm.realmtasks.util.JSONObject;
+import io.realm.realmtasks.util.TimingLogger;
 
 import static io.realm.realmtasks.RealmTasksApplication.AUTH_URL;
 import static io.realm.realmtasks.RealmTasksApplication.REALM_URL_INVITES_PUBLIC_MY;
@@ -59,6 +60,7 @@ import static io.realm.realmtasks.model.User.FIELD_REALMUSERID;
 
 public class SignInActivity extends AppCompatActivity implements SyncUser.Callback {
 
+    public static final String TAG = "TIMING";
     public static final String ACTION_IGNORE_CURRENT_USER = "action.ignoreCurrentUser";
 
     private View progressView;
@@ -68,6 +70,8 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
 
     private Action<ResponseZerokitError> onFailZerokit;
     private Action<ResponseAdminApiError> onFailAdminApi;
+
+    private TimingLogger timingLoginAsync = new TimingLogger(TAG, "Login realm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,10 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
             if (!ACTION_IGNORE_CURRENT_USER.equals(getIntent().getAction())) {
                 showProgress(true);
                 final SyncUser user = SyncUser.currentUser();
+                TimingLogger timing = new TimingLogger(TAG, "Login check");
                 Response<String, ResponseZerokitError> response = Zerokit.getInstance().whoAmI().execute();
+                timing.addSplit("whoAmI");
+                timing.dumpToLog();
                 if (user != null && !Objects.equals(response.getResult(), "null")) {
                     loginComplete();
                 } else {
@@ -115,6 +122,7 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
             public void onRegistrationComplete(IdentityTokens result) {
                 UserManager.setAuthMode(UserManager.AUTH_MODE.ZEROKIT);
                 SyncCredentials credentials = SyncCredentials.custom(result.getAuthorizationCode(), "custom/zerokit", null);
+                timingLoginAsync.reset();
                 SyncUser.loginAsync(credentials, AUTH_URL, SignInActivity.this);
             }
 
@@ -183,6 +191,8 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
 
     @Override
     public void onSuccess(SyncUser user) {
+        timingLoginAsync.addSplit("finished");
+        timingLoginAsync.dumpToLog();
         loginComplete();
     }
 
@@ -204,6 +214,7 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
     }
 
     private void createInitialDataIfNeeded(final Callback actionSuccess) {
+        TimingLogger timing = new TimingLogger(TAG, "Init management");
         Realm.getInstance(UserManager.getSyncConfigurationForInvitationPublic()).close();
         try (Realm realmManagement = SyncUser.currentUser().getManagementRealm()) {
             realmManagement.executeTransaction(realm -> {
@@ -211,47 +222,92 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
                     realm.insert(new PermissionChange(REALM_URL_INVITES_PUBLIC_MY, "*", true, true, false));
             });
         }
+        timing.addSplit("finished");
+        timing.dumpToLog();
 
         setUpZerokit(() -> {
+            TimingLogger timing2 = new TimingLogger(TAG, "Init task");
             try (Realm realmDefault = Realm.getInstance(getSyncConfigurationForTasks())) {
                 if (realmDefault.where(TaskListList.class).count() == 0) {
-                    Zerokit.getInstance().createTresor().enqueue(tresorId ->
-                            AdminApi.getInstance().createdTresor(tresorId).enqueue(res -> {
-                                try (Realm realm = Realm.getInstance(getSyncConfigurationForTasks())) {
-                                    realm.executeTransaction(realm1 -> realm1.createObject(TaskListList.class, tresorId));
-                                }
-                                actionSuccess.call();
-                            }, onFailAdminApi), onFailZerokit);
-                } else actionSuccess.call();
+                    Zerokit.getInstance().createTresor().enqueue(tresorId -> {
+                        timing2.addSplit("createTresor");
+                        AdminApi.getInstance().createdTresor(tresorId).enqueue(res -> {
+                            timing2.addSplit("approve createTresor");
+                            try (Realm realm = Realm.getInstance(getSyncConfigurationForTasks())) {
+                                realm.executeTransaction(realm1 -> realm1.createObject(TaskListList.class, tresorId));
+                            }
+                            timing2.addSplit("create tasklist");
+                            timing2.dumpToLog();
+                            actionSuccess.call();
+                        }, onFailAdminApi);
+                    }, onFailZerokit);
+                } else {
+                    timing2.addSplit("finished");
+                    timing2.dumpToLog();
+                    actionSuccess.call();
+                }
             }
         });
     }
 
-    private void setUpZerokit(Callback callback){
+    private void setUpZerokit(Callback callback) {
+        TimingLogger timing = new TimingLogger(TAG, "Login adminapi");
         final AdminApi adminApi = AdminApi.getInstance();
         final Zerokit zerokit = Zerokit.getInstance();
-        if (adminApi.getToken() == null || UserManager.getCurrentUser() == null)
-        zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(identityTokens ->
+        if (adminApi.getToken() == null) {
+            zerokit.getIdentityTokens(adminApi.getClientId()).enqueue(identityTokens -> {
+                timing.addSplit("getIdentityTokens");
                 adminApi.login(identityTokens.getAuthorizationCode()).enqueue(responseAdminLogin -> {
+                    timing.addSplit("adminapi login");
+                    timing.dumpToLog();
                     adminApi.setToken(responseAdminLogin.getId());
-                    zerokit.whoAmI().enqueue(zerokitUserId ->
-                            adminApi.getPublicProfile(zerokitUserId).enqueue(publicProfile ->
-                                    adminApi.getProfile().enqueue(profile -> {
-                                        String realmUserId = SyncUser.currentUser().getIdentity();
-                                        UserManager.setCurrentUser(new User(realmUserId, zerokitUserId, new JSONObject(profile).getString("alias")));
-                                        JSONObject jsonObject = new JSONObject(publicProfile);
-                                        if (TextUtils.isEmpty(jsonObject.getString(FIELD_REALMUSERID))) {
-                                            jsonObject.put(FIELD_REALMUSERID, realmUserId);
-                                            adminApi.storePublicProfile(jsonObject.toString()).enqueue(res ->
-                                                    callback.call(), onFailAdminApi);
-                                        } else
-                                            callback.call();
-                                    }, onFailAdminApi), onFailAdminApi), onFailZerokit);
-                }, onFailAdminApi), onFailZerokit);
-        else callback.call();
+                    setUpProfile(callback);
+                }, onFailAdminApi);
+            }, onFailZerokit);
+        } else {
+            timing.addSplit("finished");
+            timing.dumpToLog();
+            setUpProfile(callback);
+        }
     }
 
-    private interface Callback{
+    private void setUpProfile(Callback callback) {
+        TimingLogger timing = new TimingLogger(TAG, "Init profile");
+        final AdminApi adminApi = AdminApi.getInstance();
+        final Zerokit zerokit = Zerokit.getInstance();
+        if (UserManager.getCurrentUser() == null) {
+            zerokit.whoAmI().enqueue(zerokitUserId -> {
+                timing.addSplit("whoAmI");
+                adminApi.getPublicProfile(zerokitUserId).enqueue(publicProfile -> {
+                    timing.addSplit("getPublicProfile");
+                    adminApi.getProfile().enqueue(profile -> {
+                        timing.addSplit("getProfile");
+                        String realmUserId = SyncUser.currentUser().getIdentity();
+                        UserManager.setCurrentUser(new User(realmUserId, zerokitUserId, new JSONObject(profile).getString("alias")));
+                        JSONObject jsonObject = new JSONObject(publicProfile);
+                        if (TextUtils.isEmpty(jsonObject.getString(FIELD_REALMUSERID))) {
+                            jsonObject.put(FIELD_REALMUSERID, realmUserId);
+                            adminApi.storePublicProfile(jsonObject.toString()).enqueue(res -> {
+                                timing.addSplit("storePublicProfile");
+                                timing.dumpToLog();
+                                callback.call();
+                            }, onFailAdminApi);
+                        } else {
+                            timing.addSplit("finished");
+                            timing.dumpToLog();
+                            callback.call();
+                        }
+                    }, onFailAdminApi);
+                }, onFailAdminApi);
+            }, onFailZerokit);
+        } else {
+            timing.addSplit("finished");
+            timing.dumpToLog();
+            callback.call();
+        }
+    }
+
+    private interface Callback {
         void call();
     }
 

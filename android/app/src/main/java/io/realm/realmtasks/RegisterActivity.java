@@ -33,14 +33,19 @@ import io.realm.ObjectServerError;
 import io.realm.SyncCredentials;
 import io.realm.SyncUser;
 import io.realm.realmtasks.auth.zerokit.ZerokitAuth;
+import io.realm.realmtasks.util.TimingLogger;
 
 import static io.realm.realmtasks.RealmTasksApplication.AUTH_URL;
 
 public class RegisterActivity extends AppCompatActivity implements SyncUser.Callback {
 
+    public static final String TAG = "TIMING";
+
     private View progressView;
     private View registerFormView;
     private ZerokitAuth zerokitAuth;
+
+    private TimingLogger timingLoginAsync = new TimingLogger(TAG, "Login realm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity implements SyncUser.Call
             public void onRegistrationComplete(IdentityTokens result) {
                 UserManager.setAuthMode(UserManager.AUTH_MODE.ZEROKIT);
                 SyncCredentials credentials = SyncCredentials.custom(result.getAuthorizationCode(), "custom/zerokit", null);
+                timingLoginAsync.reset();
                 SyncUser.loginAsync(credentials, AUTH_URL, RegisterActivity.this);
             }
 
@@ -108,6 +114,8 @@ public class RegisterActivity extends AppCompatActivity implements SyncUser.Call
 
     @Override
     public void onSuccess(SyncUser user) {
+        timingLoginAsync.addSplit("finished");
+        timingLoginAsync.dumpToLog();
         registrationComplete();
     }
 

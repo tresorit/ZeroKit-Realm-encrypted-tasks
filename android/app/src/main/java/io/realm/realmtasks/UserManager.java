@@ -25,7 +25,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.SyncConfiguration;
+import io.realm.SyncSession;
 import io.realm.SyncUser;
+import io.realm.annotations.RealmModule;
+import io.realm.log.RealmLog;
+import io.realm.realmtasks.model.Permission;
+import io.realm.realmtasks.model.Task;
+import io.realm.realmtasks.model.TaskList;
+import io.realm.realmtasks.model.TaskListList;
 import io.realm.realmtasks.model.User;
 
 import static io.realm.realmtasks.RealmTasksApplication.REALM_URL;
@@ -49,6 +56,7 @@ public class UserManager {
     private static User currentUser;
 
     private static Map<String, SyncConfiguration> syncConfigurationMap = new HashMap<>();
+    private static SyncSession.ErrorHandler errorHandler = (syncSession, objectServerError) -> RealmLog.error(String.format("Unexpected error: %s", objectServerError.toString()));
 
     // Supported authentication mode
     public enum AUTH_MODE {
@@ -84,14 +92,15 @@ public class UserManager {
     public static SyncConfiguration getSyncConfigurationForTasks(String userId) {
         if (userId == null) userId = "";
         if (!syncConfigurationMap.containsKey(userId)) {
-            syncConfigurationMap.put(userId, new SyncConfiguration.Builder(SyncUser.currentUser(), TextUtils.isEmpty(userId) ? REALM_URL_MY : String.format(REALM_URL, userId)).schemaVersion(SCHEMA_VERSION).build());
+            syncConfigurationMap.put(userId, new SyncConfiguration.Builder(SyncUser.currentUser(), TextUtils.isEmpty(userId) ? REALM_URL_MY : String.format(REALM_URL, userId)).modules(new ModuleTask()).schemaVersion(SCHEMA_VERSION).errorHandler(errorHandler).build());
         }
         return syncConfigurationMap.get(userId);
     }
 
     public static SyncConfiguration getSyncConfigurationForPermission() {
-        if (syncConfigurationPermission == null)
-            syncConfigurationPermission = new SyncConfiguration.Builder(SyncUser.currentUser(), REALM_URL_PERMISSION_MY).build();
+        if (syncConfigurationPermission == null) {
+            syncConfigurationPermission = new SyncConfiguration.Builder(SyncUser.currentUser(), REALM_URL_PERMISSION_MY).modules(new ModulePermission()).schemaVersion(SCHEMA_VERSION).errorHandler(errorHandler).build();
+        }
         return syncConfigurationPermission;
     }
 
@@ -102,7 +111,7 @@ public class UserManager {
     }
 
     public static SyncConfiguration getSyncConfigurationForInvitationPublic(String userId) {
-        return new SyncConfiguration.Builder(SyncUser.currentUser(), TextUtils.isEmpty(userId) ? REALM_URL_INVITES_PUBLIC_MY : String.format(REALM_URL_INVITES_PUBLIC, userId)).schemaVersion(SCHEMA_VERSION).build();
+        return new SyncConfiguration.Builder(SyncUser.currentUser(), TextUtils.isEmpty(userId) ? REALM_URL_INVITES_PUBLIC_MY : String.format(REALM_URL_INVITES_PUBLIC, userId)).modules(new ModuleUser()).schemaVersion(SCHEMA_VERSION).errorHandler(errorHandler).build();
     }
 
     public static SyncConfiguration getSyncConfigurationForShare() {
@@ -113,7 +122,7 @@ public class UserManager {
 
     public static SyncConfiguration getSyncConfigurationForInvitationPrivate() {
         if (syncConfigurationInvitationPrivate == null)
-            syncConfigurationInvitationPrivate = new SyncConfiguration.Builder(SyncUser.currentUser(), REALM_URL_INVITES_PRIVATE_MY).schemaVersion(SCHEMA_VERSION).build();
+            syncConfigurationInvitationPrivate = new SyncConfiguration.Builder(SyncUser.currentUser(), REALM_URL_INVITES_PRIVATE_MY).schemaVersion(SCHEMA_VERSION).modules(new ModuleUser()).errorHandler(errorHandler).build();
         return syncConfigurationInvitationPrivate;
     }
 
@@ -123,5 +132,17 @@ public class UserManager {
 
     public static User getCurrentUser() {
         return currentUser;
+    }
+
+    @RealmModule(classes = { TaskListList.class, TaskList.class, Task.class})
+    public static class ModuleTask {
+    }
+
+    @RealmModule(classes = { User.class})
+    public static class ModuleUser {
+    }
+
+    @RealmModule(classes = { Permission.class})
+    public static class ModulePermission {
     }
 }
