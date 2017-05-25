@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "io.realm.realmtasks"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "0.2.3"
+    }
+    buildTypes {
+        all{
+            buildConfigField "String", "OBJECT_SERVER_IP", "\"YOUR OBJECT SERVER IP HERE e.g. 10.0.100.10\""
+            buildConfigField "int", "OBJECT_SERVER_PORT", "YOUR OBJECT SERVER PORT HERE e.g. 9080"
+        }
+        debug {
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+realm {
+    syncEnabled = true
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-annotations:25.3.1'
+    compile 'io.realm:android-adapters:1.4.1'
+
+    compile 'com.tresorit.zerokit:zerokit:4.1.1'
+    compile project(':adminapi')
+
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+}

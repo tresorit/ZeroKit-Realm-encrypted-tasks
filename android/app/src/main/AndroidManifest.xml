@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="io.realm.realmtasks"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name=".RealmTasksApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.tresorit.zerokitsdk.API_ROOT"
+            android:value="@string/zerokit_root_url"/>
+
+        <activity
+            android:name=".SignInActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/activity_register_label">
+        </activity>
+
+        <activity android:name=".TaskListActivity">
+        </activity>
+
+        <activity android:name=".TaskActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".TaskListActivity"/>
+        </activity>
+        <activity android:name=".InvitationListActivity" />
+        <activity android:name=".ShareListActivity" />
+    </application>
+
+</manifest>
