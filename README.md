@@ -49,9 +49,9 @@ Click on the "Add client" button and complete the form according to the followin
 ![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/zerokit-realm-idp-client.png)
 
 ## III. Install Realm Object Server (ROS)
-**Info:** You can skip this step if you already has a ZeroKit tenant.
+**Info:** You can skip this step if you already have ROS installed.
 
-Please navigate to https://realm.io/products/realm-mobile-platform/ and follow the instructions according to your platform to install a ROS instance for yourself. Any edition of ROS will do for this setup.
+Please navigate to https://realm.io/products/realm-mobile-platform/ and follow the instructions according to your platform to install a ROS instance for yourself. Any up-to-date edition of ROS will do for this setup.
 
 ## IV. Configure authentication
 To enable ZeroKit based authentication, you have to install the ZeroKit-Realm authentication module for ROS. The module is open-source, you can find it on GitHub: https://github.com/tresorit/ZeroKit-Realm-auth-provider
@@ -60,11 +60,13 @@ To install the module for ROS, please open a terminal *on the same machine* wher
 ```bash
 curl -sL https://github.com/tresorit/ZeroKit-Realm-auth-provider/raw/master/install.sh | sudo -E bash -
 ```
-**Notice:** if you need more help or want to install it manually, you can find more detailed description in the module's repository on GitHub
+**Notes:**
+ - if you need more help or want to install it manually, you can find more detailed description in the module's repository on GitHub
+ - curl utility should be installed by default if you are using OsX or Ubuntu, but if not, you may install it with the package manager of your system.
 
-The script will automatically install the module and will produce a code snippet which should be inserted into the configuration file of ROS in the **"auth"** section.
+The script will automatically install the module and will produce a code snippet which should be inserted into the configuration file of ROS **under** the **"auth/providers"** section. (please do not copy "*auth:*" and "*providers:*" tags themselves).
 
-> Realm Object Server's config file is can be found at this location, according ot your platform:
+> Realm Object Server's config file can be found at this location, according to your platform:
   >   - On linux: /etc/realm/configuration.yml
   >   - On OsX:   {realm-mobile-platform-directory}/realm-object-server/object-server/configuration.yml
 
@@ -97,9 +99,9 @@ auth:
 
 After you have copied the snippet into the configuration file, please edit it and change:
 
-* *Service uri* for the service uri of your tenant (you can find the value on the main config page)
 * *Client ID* for the id of the IDP client you have configured in the second step of the tutorial
-* *Client secret* for the secret string of the same IDP client 
+* *Client secret* for the secret string of the same IDP client
+* *Service uri* for the service uri of your tenant (you can find the value on the main config page)
 
 Now you can restart ROS to pick up new config. On MAC simply close and restart the startup script of the server, on Linux please type the following line in a terminal:
 ```bash
@@ -109,7 +111,7 @@ sudo systemctl restart realm-object-server
 If the server has started successfully (you can access the Realm dashboard in a browser), then you have completed the ROS configuration and you can move to the next section. On a failure you can try to start the server manually from a command line to see the error which prevents it from starting.
 
 ## One-click template deployment of sample server
-Next step is to install the ZeroKit sample backend server. You can find the source code and the manual install instructions on GitHub, but in this tutorial we will use a one-click Azure deployment to create a new infrastructure in MS Azure Cloud for it. (For this you will need a MS Azure subscription account.)
+Next step is to install the ZeroKit sample backend server. You can find the source code and the manual install instructions (for non-Azure deployments) on [GitHub](https://github.com/tresorit/ZeroKit-NodeJs-backend-sample), but in this tutorial we will use a one-click Azure deployment to create a new infrastructure in MS Azure Cloud for it. (For this you will need a MS Azure subscription account.)
 
 The repository for the one-clieck installer can be found [here](https://github.com/tresorit/ZeroKit-Azure-backend-sample). if you need any more help with this app, you can find it there.
 
