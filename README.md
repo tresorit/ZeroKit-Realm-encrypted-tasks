@@ -54,6 +54,8 @@ Click on the "Add client" button and complete the form according to the followin
 Please navigate to https://realm.io/products/realm-mobile-platform/ and follow the instructions according to your platform to install a ROS instance for yourself. Any up-to-date edition of ROS will do for this setup.
 
 ## IV. Configure authentication
+**Prerequisites:** You will need [NodeJS, NPM](https://nodejs.org/en/download/current/) and git installed on your machine. We recommend to install these utilities through the default package manager of your OS. ([How to install NodeJS from package manager.](https://nodejs.org/en/download/package-manager))
+
 To enable ZeroKit based authentication, you have to install the ZeroKit-Realm authentication module for ROS. The module is open-source, you can find it on GitHub: https://github.com/tresorit/ZeroKit-Realm-auth-provider
 
 To install the module for ROS, please open a terminal *on the same machine* where ROS is installed, and run the following command 
@@ -74,25 +76,26 @@ The script will automatically install the module and will produce a code snippet
  This is just an example, please use the code snippet produced by the installer as it may contain further modifications.
 ```yml
 auth:
-    providers:
-       # This enables login via ZeroKit's secure identity provider:
-       # The client ID of the IDP client created for the Realm object server
-       # on ZeroKit management portal (https://manage.tresori.io)
-       client_id: 'example_client'
+  providers:
+    # This enables login via ZeroKit's secure identity provider
+    custom/zerokit:
+      # The client ID of the IDP client created for the Realm object server
+      # on ZeroKit management portal (https://manage.tresori.io)
+      client_id: 'example_client'
+      
+      # The client secret of the IDP client created for the Realm object server
+      # on ZeroKit management portal (https://manage.tresori.io)
+      client_secret: 'example_secret'
+      
+      # The service URL of your ZeroKit tenant. It can be found on the main
+      # configuration page of your tenant on ZeroKit management portal
+      # (https://manage.tresori.io)
+      service_url: 'https://example.api.tresorit.io'
   
-       # The client secret of the IDP client created for the Realm object server
-       # on ZeroKit management portal (https://manage.tresori.io)
-       client_secret: 'example_secret'
-  
-       # The service URL of your ZeroKit tenant. It can be found on the main
-       # configuration page of your tenant on ZeroKit management portal
-       # (https://manage.tresori.io)
-       service_url: 'https://example.api.tresorit.io'
-
       # The include path to use for including ZeroKit auth implementation.
       # Usually it's /usr/local/zerokit/zerokit-realm-auth-provider
       include_path: '/usr/local/zerokit/zerokit-realm-auth-provider'
-
+      
       # This refers to the actual implementation (should be zerokitauth)
       implementation: 'zerokitauth'
 ```
