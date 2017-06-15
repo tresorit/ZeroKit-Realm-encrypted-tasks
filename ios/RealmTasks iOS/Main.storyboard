@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="aso-lK-2Ix">
+            <objects>
+                <viewController storyboardIdentifier="LoggingInViewController" id="IV1-Wa-anv" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pQD-N4-CcI"/>
+                        <viewControllerLayoutGuide type="bottom" id="T9G-ZZ-Zbd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SYa-il-EBJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="e2F-xv-8Ka">
+                                <rect key="frame" x="169" y="278" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loggin in..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KZa-uX-XDy">
+                                <rect key="frame" x="145" y="323" width="84" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="KZa-uX-XDy" firstAttribute="top" secondItem="e2F-xv-8Ka" secondAttribute="bottom" constant="8" id="Fw1-QY-fzS"/>
+                            <constraint firstItem="KZa-uX-XDy" firstAttribute="centerX" secondItem="SYa-il-EBJ" secondAttribute="centerX" id="Jii-vH-oSk"/>
+                            <constraint firstItem="e2F-xv-8Ka" firstAttribute="centerX" secondItem="SYa-il-EBJ" secondAttribute="centerX" id="sKn-Bp-0L0"/>
+                            <constraint firstItem="KZa-uX-XDy" firstAttribute="centerY" secondItem="SYa-il-EBJ" secondAttribute="centerY" id="xrV-8M-4Jp"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="73a-GN-YD4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="127" y="160"/>
+        </scene>
+    </scenes>
+</document>
