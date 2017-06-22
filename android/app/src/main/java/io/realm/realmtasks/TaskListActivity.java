@@ -76,7 +76,13 @@ public class TaskListActivity extends BaseListenerActivity {
     }
 
     private void updateList(RealmResults<TaskListList> results) {
-        if (results.size() > 0 && adapter == null) {
+        if (results.size() > 0) {
+
+            if (adapter != null){
+                touchHelper.attachToRecyclerView(null);
+                adapter = null;
+            }
+
             // Create Adapter
             adapter = new TaskListAdapter(realm, TaskListActivity.this, results.first().getItems(), results.get(0).getId());
             touchHelper = new TouchHelper(new Callback(), adapter);
