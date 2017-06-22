@@ -19,17 +19,8 @@
 import Foundation
 
 struct Constants {
-    // Specify your Realm object server IP address, eg. "10.0.100.43". The default `localIPAddress` is the IP address of your device.
-    static let syncHost = localIPAddress
-    // Specify your Realm object server port. Default is 9080.
-    static let port = 9080
-
-    static let syncRealmPath = "realmtasks"
     static let defaultListName = "My Tasks"
     static let defaultListID = "80EB1620-165B-4600-A1B1-D97032FDD9A0"
-
-    static let syncServerURL = URL(string: "realm://\(syncHost):\(port)/~/\(syncRealmPath)")
-    static let syncAuthURL = URL(string: "http://\(syncHost):\(port)")!
 
     static let appID = Bundle.main.bundleIdentifier!
 }

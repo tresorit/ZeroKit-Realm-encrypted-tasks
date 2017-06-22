@@ -368,12 +368,12 @@ final class ViewController<Item: Object, Parent: Object>: UIViewController, UIGe
         switch listType {
         case .lists:
             return ViewController<TaskList, TaskListList>(
-                parent: try! Realm().objects(TaskListList.self).first!,
+                parent: self.items.realm!.objects(TaskListList.self).first!,
                 colors: UIColor.listColors()
             )
         case .defaultListTasks:
             return ViewController<Task, TaskList>(
-                parent: try! Realm().objects(TaskList.self).first!,
+                parent: self.items.realm!.objects(TaskList.self).first!,
                 colors: UIColor.taskColors()
             )
         case .tasks(let list):

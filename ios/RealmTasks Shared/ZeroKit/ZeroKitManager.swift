@@ -1,5 +1,13 @@
 import ZeroKit
 
+enum ProfileField: String {
+    case alias
+}
+
+enum PublicProfileField: String {
+    case realmUserId
+}
+
 class ZeroKitManager: NSObject {
     static let shared = ZeroKitManager()
 

@@ -52,6 +52,23 @@ extension Color {
             Color(red: 54/255, green: 207/255, blue: 251/255, alpha: 1)
         ]
     }
+
+    static func shareColors() -> [Color] {
+        return [
+            Color(red: 6/255, green: 240/255, blue: 147/255, alpha: 1),
+            Color(red: 16/255, green: 240/255, blue: 158/255, alpha: 1),
+            Color(red: 26/255, green: 240/255, blue: 169/255, alpha: 1),
+            Color(red: 33/255, green: 240/255, blue: 180/255, alpha: 1),
+            Color(red: 40/255, green: 240/255, blue: 190/255, alpha: 1),
+            Color(red: 46/255, green: 240/255, blue: 198/255, alpha: 1),
+            Color(red: 54/255, green: 240/255, blue: 207/255, alpha: 1)
+        ]
+    }
+
+    static func color(forRow row: Int, count: Int, colors: [Color]) -> Color {
+        let fraction = Double(row) / Double(max(13, count))
+        return colors.gradientColor(atFraction: fraction)
+    }
 }
 
 extension Collection where Iterator.Element == Color, Index == Int {

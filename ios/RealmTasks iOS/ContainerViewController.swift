@@ -30,6 +30,7 @@ class ContainerViewController: UIViewController {
                 ZeroKitManager.shared.zeroKit.decrypt(cipherText: title) { [weak self] plainText, _ in
                     if let plainText = plainText, let currentTitle = self?.title, currentTitle == title {
                         self?.titleLabel.text = plainText
+                        self?.title = plainText
                     }
                 }
             }
@@ -40,24 +41,44 @@ class ContainerViewController: UIViewController {
             }
         }
     }
+    var tasksRealm: Realm?
+    var token: NotificationToken?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 
+    deinit {
+        token?.stop()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.black
         addChildVC()
         setupTitleBar()
     }
 
     private func addChildVC() {
-        let firstList = try! Realm().objects(TaskList.self).first!
-        let vc = ViewController(parent: firstList, colors: UIColor.taskColors())
-        title = firstList.text
-        addChildViewController(vc)
-        view.addSubview(vc.view)
-        vc.didMove(toParentViewController: self)
+        if self.tasksRealm == nil {
+            self.tasksRealm = try! Realm()
+        }
+        if let firstList = self.tasksRealm!.objects(TaskList.self).first {
+            let vc = ViewController(parent: firstList, colors: UIColor.taskColors())
+            title = firstList.text
+            addChildViewController(vc)
+            view.addSubview(vc.view)
+            vc.didMove(toParentViewController: self)
+            token?.stop()
+            token = nil
+        } else if token == nil {
+            // Wait for realm to refresh
+            token = self.tasksRealm!.addNotificationBlock { [weak self] _, _ in
+                if let sself = self {
+                    sself.addChildVC()
+                }
+            }
+        }
     }
 
     private func setupTitleBar() {

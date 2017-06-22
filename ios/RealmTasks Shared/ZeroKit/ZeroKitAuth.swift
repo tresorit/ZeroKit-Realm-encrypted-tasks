@@ -24,7 +24,11 @@ class ZeroKitAuth: NSObject, AuthenticationProvider {
         let backend = ZeroKitManager.shared.backend
         let zeroKit = ZeroKitManager.shared.zeroKit
 
-        backend.initRegistration(username: testUsername(from: username), profileData: "{ \"autoValidate\": true }") { userId, regSessionId, error in
+        let profileJson = ["autoValidate": true, // Test ZeroKit backend value so users with name 'test-user-*' are auto-validated upon registration.
+                           ProfileField.alias.rawValue: username] as [String : Any]
+        let json = String(data: try! JSONSerialization.data(withJSONObject: profileJson, options: []), encoding: .utf8)!
+
+        backend.initRegistration(username: ZeroKitAuth.testUsername(from: username), profileData: json) { userId, regSessionId, error in
 
             if let error = error {
                 self.complete(error: error)
@@ -60,7 +64,7 @@ class ZeroKitAuth: NSObject, AuthenticationProvider {
         let backend = ZeroKitManager.shared.backend
         let zeroKit = ZeroKitManager.shared.zeroKit
 
-        backend.getUserId(forUsername: testUsername(from: username)) { userId, error in
+        backend.getUserId(forUsername: ZeroKitAuth.testUsername(from: username)) { userId, error in
 
             if let error = error {
                 self.complete(error: error)
@@ -91,7 +95,7 @@ class ZeroKitAuth: NSObject, AuthenticationProvider {
         }
     }
 
-    func testUsername(from username: String) -> String {
+    class func testUsername(from username: String) -> String {
         // This modification is for the sample zerokit backend to automatically validate users.
         if !username.hasPrefix("test-user-") {
             return "test-user-\(username)"

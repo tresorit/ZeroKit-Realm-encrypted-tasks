@@ -127,7 +127,7 @@ UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate where Pa
 //            }
 //        }
 //        return floor(max(cellPresenter.cellHeight(forText: item.text, timeHidden: item.date == nil), tableView.rowHeight))
-        
+
         // TODO: calculate size for decrypted content
         return 54
     }
@@ -263,8 +263,7 @@ UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate where Pa
     private let colors: [UIColor]
 
     func color(forRow row: Int) -> UIColor {
-        let fraction = Double(row) / Double(max(13, items.count))
-        return colors.gradientColor(atFraction: fraction)
+        return Color.color(forRow: row, count: items.count, colors: colors)
     }
 
     func updateColors(completion: (() -> Void)? = nil) {

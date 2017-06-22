@@ -17,6 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import Foundation
+import Realm
 import RealmSwift
 import ZeroKit
 
@@ -34,7 +35,7 @@ public func setDefaultRealmConfiguration(with user: SyncUser, completion: @escap
     }
 
     Realm.Configuration.defaultConfiguration = Realm.Configuration(
-        syncConfiguration: SyncConfiguration(user: user, realmURL: Constants.syncServerURL!),
+        syncConfiguration: SyncConfiguration(user: user, realmURL: Config.shared.syncServerURL),
         objectTypes: [TaskListList.self, TaskList.self, Task.self]
     )
     let realm = try! Realm()
@@ -65,24 +66,30 @@ public func setDefaultRealmConfiguration(with user: SyncUser, completion: @escap
                     }
 
                     try! realm.write {
-                        let list = TaskList()
-                        list.id = Constants.defaultListID
-                        list.tresorId = tresorId!
-                        list.text = cipherText!
-                        let listLists = TaskListList()
-                        listLists.tresorId = tresorId!
-                        listLists.items.append(list)
-                        realm.add(listLists)
+                        if realm.isEmpty {
+                            let list = TaskList()
+                            list.id = Constants.defaultListID
+                            list.tresorId = tresorId!
+                            list.text = cipherText!
+                            let listLists = TaskListList()
+                            listLists.tresorId = tresorId!
+                            listLists.items.append(list)
+                            realm.add(listLists)
+                        }
                     }
 
                     registerDeduplication(realm)
-                    completion(nil)
+                    setupInvitesPublicRealm(with: user) { error in
+                        completion(error)
+                    }
                 }
             }
         }
     } else {
         registerDeduplication(realm)
-        completion(nil)
+        setupInvitesPublicRealm(with: user) { error in
+            completion(error)
+        }
     }
 }
 
@@ -112,6 +119,73 @@ private func registerDeduplication(_ realm: Realm) {
     }
 }
 
+private func setupInvitesPublicRealm(with user: SyncUser, completion: @escaping (Error?) -> Void) {
+    let realm = invitesPublicRealm()!
+    let path = realm.configuration.syncConfiguration!.realmURL.path
+    let permission = RLMSyncPermissionValue(realmPath: path, userID: "*", accessLevel: .write)
+    user.applyPermission(permission) { error in
+        completion(error)
+    }
+}
+
+func invitesPublicRealm(for realmUserId: String? = nil) -> Realm? {
+    let url: URL
+    if let realmUserId = realmUserId {
+        url = URL(string: String(format: Config.shared.syncInvitesPublicURLFormat, realmUserId))!
+    } else {
+        url = Config.shared.syncInvitesPublicURL
+    }
+
+    return sharesRealm(with: url)
+}
+
+func invitesPrivateRealm() -> Realm? {
+    return sharesRealm(with: Config.shared.syncInvitesPrivateServerURL)
+}
+
+func sharesRealm() -> Realm? {
+    return sharesRealm(with: Config.shared.syncSharesServerURL)
+}
+
+private func sharesRealm(with url: URL) -> Realm? {
+    guard let user = SyncUser.current else {
+        return nil
+    }
+
+    if let realm = sharingRealms?[url] {
+        return realm
+    }
+
+    let config = Realm.Configuration(
+        syncConfiguration: SyncConfiguration(user: user, realmURL: url),
+        objectTypes: [User.self]
+    )
+
+    let realm = try! Realm(configuration: config)
+    if sharingRealms == nil {
+        sharingRealms = [:]
+    }
+    sharingRealms![url] = realm
+
+    return realm
+}
+
+private var sharingRealms: [URL: Realm]?
+
+func tasksRealm(for realmUserId: String) -> Realm? {
+    guard let user = SyncUser.current else {
+        return nil
+    }
+
+    let url = URL(string: String(format: Config.shared.syncServerURLFormat, realmUserId))!
+    let config = Realm.Configuration(
+        syncConfiguration: SyncConfiguration(user: user, realmURL: url),
+        objectTypes: [TaskListList.self, TaskList.self, Task.self]
+    )
+
+    return try! Realm(configuration: config)
+}
+
 // Internal Functions
 
 func isDefaultRealmConfigured() -> Bool {
@@ -138,29 +212,21 @@ func canConfigureDefaultRealm() -> Bool {
 func configureDefaultRealm(completion: @escaping (Bool) -> Void) {
     let userIds = ZeroKitManager.shared.zeroKitAndRealmUserId()
 
-    if let user = SyncUser.current,
-        let zeroKitUserId = userIds.zeroKitUserId,
+    if let zeroKitUserId = userIds.zeroKitUserId,
         canConfigureDefaultRealm() {
 
         ZeroKitManager.shared.zeroKit.loginByRememberMe(with: zeroKitUserId) { error in
-            if let error = error {
-                completion(false)
-                print("ZeroKit loginByRememberMe failed:", error)
-            } else {
-                updateLoggedInUser(zeroKitUserId: zeroKitUserId, realmUser: user)
-                setDefaultRealmConfiguration(with: user) { error in
-                    completion(error == nil)
-                }
-            }
+            completion(error == nil)
         }
     } else {
         completion(false)
     }
 }
 
-func logout(completion: @escaping (NSError?) -> Void) {
+func logoutServices(completion: @escaping (NSError?) -> Void) {
     ZeroKitManager.shared.zeroKit.logout { error in
-        SyncUser.current?.logOut()
+        ZeroKitManager.shared.backend.forgetToken()
+        resetDefaultRealm()
         completion(error)
     }
 }
@@ -180,6 +246,7 @@ func resetDefaultRealm() {
     }
 
     deduplicationNotificationToken.stop()
+    sharingRealms = nil
 
     user.logOut()
 }
@@ -190,7 +257,7 @@ func setAuthenticationFailureCallback(callback: (() -> Void)?) {
 
 func authenticate(username: String, password: String, register: Bool, callback: @escaping (NSError?) -> Void) {
     let credentials = SyncCredentials.usernamePassword(username: username, password: password, register: register)
-    SyncUser.logIn(with: credentials, server: Constants.syncAuthURL) { user, error in
+    SyncUser.logIn(with: credentials, server: Config.shared.syncAuthURL) { user, error in
         DispatchQueue.main.async {
             if let user = user, error == nil {
                 setDefaultRealmConfiguration(with: user) { error in

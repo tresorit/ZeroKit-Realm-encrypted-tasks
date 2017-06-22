@@ -27,13 +27,19 @@
 		C23EB0381D4643B900D3E0AC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23EB0371D4643B900D3E0AC /* Constants.swift */; };
 		C2E472201D3FDF2E00276542 /* LocalIPAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E4721F1D3FDF2E00276542 /* LocalIPAddress.swift */; };
 		C2E981E81DB4F27300288A2B /* NSAttributedString+Strikethrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E981E71DB4F27300288A2B /* NSAttributedString+Strikethrough.swift */; };
+		E759B29C1EF3D67E00AD28CF /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759B29B1EF3D67E00AD28CF /* AccountViewController.swift */; };
+		E759B2A21EF404AF00AD28CF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759B2A11EF404AF00AD28CF /* User.swift */; };
+		E759B2A61EF8153C00AD28CF /* MySharesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759B2A51EF8153C00AD28CF /* MySharesViewController.swift */; };
+		E759B2A81EF81A5300AD28CF /* SharedListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759B2A71EF81A5300AD28CF /* SharedListsViewController.swift */; };
 		E7C58C561EEEC33D00E73782 /* ZeroKitAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C58C551EEEC33D00E73782 /* ZeroKitAuth.swift */; };
 		E7C58C611EEEC4FD00E73782 /* ZeroKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */; };
 		E7C58C621EEEC4FD00E73782 /* ZeroKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E7C58C671EEECA5F00E73782 /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C58C661EEECA5F00E73782 /* Backend.swift */; };
 		E7C58C691EEECB4600E73782 /* ZeroKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C58C681EEECB4600E73782 /* ZeroKitManager.swift */; };
-		E7C58C6B1EEED35300E73782 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7C58C6A1EEED35300E73782 /* Config.plist */; };
 		E7C58C6D1EF0021800E73782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7C58C6C1EF0021800E73782 /* Main.storyboard */; };
+		E7D720FF1EFBA01700C21691 /* ShareBaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D720FE1EFBA01700C21691 /* ShareBaseTableViewController.swift */; };
+		E7D721021EFBE5D200C21691 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D721011EFBE5D200C21691 /* Config.swift */; };
+		E7D721041EFBE61600C21691 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7D721031EFBE61600C21691 /* Config.plist */; };
 		E8A1E6501D59354500D8B04A /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A1E64F1D59354500D8B04A /* ContainerViewController.swift */; };
 		E8A1E6521D59360A00D8B04A /* SharedFunctionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A1E6511D59360A00D8B04A /* SharedFunctionality.swift */; };
 		FF0E3E58E9D099F7E36AAB6F /* Pods_RealmTasks_RealmTasks_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0F0C2CAF892AF7AD2EF7F65 /* Pods_RealmTasks_RealmTasks_iOS.framework */; };
@@ -46,13 +52,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = E762F0601D9C193500170D9F;
 			remoteInfo = ZeroKit;
-		};
-		E7C58C5F1EEEC4EC00E73782 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E7C57F401EC071C000F145DD;
-			remoteInfo = ZeroKitTests;
 		};
 		E7C58C631EEEC4FD00E73782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -105,12 +104,18 @@
 		C23EB0371D4643B900D3E0AC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C2E4721F1D3FDF2E00276542 /* LocalIPAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalIPAddress.swift; sourceTree = "<group>"; };
 		C2E981E71DB4F27300288A2B /* NSAttributedString+Strikethrough.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Strikethrough.swift"; sourceTree = "<group>"; };
+		E759B29B1EF3D67E00AD28CF /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		E759B2A11EF404AF00AD28CF /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E759B2A51EF8153C00AD28CF /* MySharesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySharesViewController.swift; sourceTree = "<group>"; };
+		E759B2A71EF81A5300AD28CF /* SharedListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedListsViewController.swift; sourceTree = "<group>"; };
 		E7C58C551EEEC33D00E73782 /* ZeroKitAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZeroKitAuth.swift; sourceTree = "<group>"; };
 		E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZeroKit.xcodeproj; path = ZeroKitSDK/ZeroKit.xcodeproj; sourceTree = "<group>"; };
 		E7C58C661EEECA5F00E73782 /* Backend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Backend.swift; path = ZeroKitSDK/Example/ZeroKitExample/Backend/Backend.swift; sourceTree = SOURCE_ROOT; };
 		E7C58C681EEECB4600E73782 /* ZeroKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZeroKitManager.swift; sourceTree = "<group>"; };
-		E7C58C6A1EEED35300E73782 /* Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		E7C58C6C1EF0021800E73782 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		E7D720FE1EFBA01700C21691 /* ShareBaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareBaseTableViewController.swift; sourceTree = "<group>"; };
+		E7D721011EFBE5D200C21691 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E7D721031EFBE61600C21691 /* Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		E84CF2B11CBC408000082C1A /* RealmTasks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealmTasks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8A1E64F1D59354500D8B04A /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		E8A1E6511D59360A00D8B04A /* SharedFunctionality.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFunctionality.swift; sourceTree = "<group>"; };
@@ -141,6 +146,8 @@
 				225201961D3DD648009E45FA /* LaunchScreen.storyboard */,
 				E7C58C6C1EF0021800E73782 /* Main.storyboard */,
 				E8A1E64F1D59354500D8B04A /* ContainerViewController.swift */,
+				E759B29B1EF3D67E00AD28CF /* AccountViewController.swift */,
+				E759B29D1EF3ED2900AD28CF /* Sharing */,
 				9CDF4F201D9E780100EC051B /* Views */,
 				9C24AA031D8FED0800192CE3 /* ViewController */,
 			);
@@ -183,7 +190,10 @@
 		C23EB02B1D4634B700D3E0AC /* RealmTasks Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E759B2A01EF4048F00AD28CF /* Sharing */,
 				E7C58C541EEEC27A00E73782 /* ZeroKit */,
+				E7D721031EFBE61600C21691 /* Config.plist */,
+				E7D721011EFBE5D200C21691 /* Config.swift */,
 				C23EB0371D4643B900D3E0AC /* Constants.swift */,
 				C2E4721F1D3FDF2E00276542 /* LocalIPAddress.swift */,
 				2252019B1D3DD648009E45FA /* Models.swift */,
@@ -208,13 +218,30 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E759B29D1EF3ED2900AD28CF /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				E759B2A51EF8153C00AD28CF /* MySharesViewController.swift */,
+				E7D720FE1EFBA01700C21691 /* ShareBaseTableViewController.swift */,
+				E759B2A71EF81A5300AD28CF /* SharedListsViewController.swift */,
+			);
+			name = Sharing;
+			sourceTree = "<group>";
+		};
+		E759B2A01EF4048F00AD28CF /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				E759B2A11EF404AF00AD28CF /* User.swift */,
+			);
+			path = Sharing;
+			sourceTree = "<group>";
+		};
 		E7C58C541EEEC27A00E73782 /* ZeroKit */ = {
 			isa = PBXGroup;
 			children = (
 				E7C58C661EEECA5F00E73782 /* Backend.swift */,
 				E7C58C551EEEC33D00E73782 /* ZeroKitAuth.swift */,
 				E7C58C681EEECB4600E73782 /* ZeroKitManager.swift */,
-				E7C58C6A1EEED35300E73782 /* Config.plist */,
 			);
 			path = ZeroKit;
 			sourceTree = "<group>";
@@ -223,7 +250,6 @@
 			isa = PBXGroup;
 			children = (
 				E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */,
-				E7C58C601EEEC4EC00E73782 /* ZeroKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -287,7 +313,7 @@
 				TargetAttributes = {
 					E84CF2B01CBC408000082C1A = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 4XL3X97RQ3;
+						DevelopmentTeam = 986R6FFN66;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -329,13 +355,6 @@
 			remoteRef = E7C58C5D1EEEC4EC00E73782 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E7C58C601EEEC4EC00E73782 /* ZeroKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ZeroKitTests.xctest;
-			remoteRef = E7C58C5F1EEEC4EC00E73782 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -343,10 +362,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7C58C6B1EEED35300E73782 /* Config.plist in Resources */,
 				E7C58C6D1EF0021800E73782 /* Main.storyboard in Resources */,
 				2252019F1D3DD648009E45FA /* iOS.xcassets in Resources */,
 				225201A01D3DD648009E45FA /* LaunchScreen.storyboard in Resources */,
+				E7D721041EFBE61600C21691 /* Config.plist in Resources */,
 				C23EB02D1D4635C400D3E0AC /* Shared.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -435,9 +454,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E759B2A61EF8153C00AD28CF /* MySharesViewController.swift in Sources */,
 				220C334A1D3DE1F40043A885 /* OnboardView.swift in Sources */,
 				C2E472201D3FDF2E00276542 /* LocalIPAddress.swift in Sources */,
 				225201A61D3DD648009E45FA /* ViewController.swift in Sources */,
+				E759B2A21EF404AF00AD28CF /* User.swift in Sources */,
+				E7D720FF1EFBA01700C21691 /* ShareBaseTableViewController.swift in Sources */,
 				22092D861D5C5BCB0016E757 /* NavHintView.swift in Sources */,
 				221324A71EAFFFD700FB22C9 /* CellDateLabel.swift in Sources */,
 				E7C58C671EEECA5F00E73782 /* Backend.swift in Sources */,
@@ -449,12 +471,15 @@
 				E7C58C561EEEC33D00E73782 /* ZeroKitAuth.swift in Sources */,
 				E8A1E6501D59354500D8B04A /* ContainerViewController.swift in Sources */,
 				9C24AA0D1D8FFEA200192CE3 /* ListPresenter.swift in Sources */,
+				E7D721021EFBE5D200C21691 /* Config.swift in Sources */,
 				9CDF4F1F1D9E745300EC051B /* UIView+constraints.swift in Sources */,
 				2252019E1D3DD648009E45FA /* AppDelegate.swift in Sources */,
+				E759B29C1EF3D67E00AD28CF /* AccountViewController.swift in Sources */,
 				E7C58C691EEECB4600E73782 /* ZeroKitManager.swift in Sources */,
 				9CDF4F1D1D9E73AF00EC051B /* ViewControllerProtocol.swift in Sources */,
 				225201A41D3DD648009E45FA /* Models.swift in Sources */,
 				225201A21D3DD648009E45FA /* RealmColor.swift in Sources */,
+				E759B2A81EF81A5300AD28CF /* SharedListsViewController.swift in Sources */,
 				9C24AA0B1D8FFC0400192CE3 /* TablePresenter.swift in Sources */,
 				C2E981E81DB4F27300288A2B /* NSAttributedString+Strikethrough.swift in Sources */,
 			);
@@ -578,7 +603,7 @@
 				CODE_SIGN_ENTITLEMENTS = "RealmTasks iOS/RealmTasks-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4XL3X97RQ3;
+				DEVELOPMENT_TEAM = 986R6FFN66;
 				INFOPLIST_FILE = "$(SRCROOT)/$(TARGET_NAME)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -598,7 +623,7 @@
 				CODE_SIGN_ENTITLEMENTS = "RealmTasks iOS/RealmTasks-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4XL3X97RQ3;
+				DEVELOPMENT_TEAM = 986R6FFN66;
 				INFOPLIST_FILE = "$(SRCROOT)/$(TARGET_NAME)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

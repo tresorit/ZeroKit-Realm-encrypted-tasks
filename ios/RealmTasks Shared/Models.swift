@@ -48,7 +48,7 @@ extension CellPresentable where Self: Object {
     func setPlainText(_ value: String, completion: @escaping (Error?) -> Void) {
         let len = value.characters.count
         if let tresorId = self.tresorId, len > 0 {
-            self.text = "Encrypting..."
+            self.text = "Encrypting..." // Set tmp text here, so item is not intstantly removed from the list because content is empty
             ZeroKitManager.shared.zeroKit.encrypt(plainText: value, inTresor: tresorId) { [weak self] cipherText, error in
                 if let cipherText = cipherText, let sself = self {
                     try! sself.realm?.write {
@@ -80,13 +80,17 @@ final class TaskListList: Object, ListPresentable {
     override static func primaryKey() -> String? {
         return "id"
     }
+
+    override static func ignoredProperties() -> [String] {
+        return ["tresorId"]
+    }
 }
 
 final class TaskList: Object, CellPresentable, ListPresentable {
     dynamic var id = NSUUID().uuidString // swiftlint:disable:this variable_name
     dynamic var tresorId: String?
     dynamic var text = ""
-    dynamic var date: Date?
+    var date: Date?
     dynamic var completed = false
     let items = List<Task>()
 
@@ -96,6 +100,10 @@ final class TaskList: Object, CellPresentable, ListPresentable {
 
     override static func primaryKey() -> String? {
         return "id"
+    }
+
+    override static func ignoredProperties() -> [String] {
+        return ["date"]
     }
 }
 
@@ -115,5 +123,9 @@ final class Task: Object, CellPresentable {
     convenience init(text: String) {
         self.init()
         self.text = text
+    }
+
+    override static func ignoredProperties() -> [String] {
+        return ["tresorId"]
     }
 }

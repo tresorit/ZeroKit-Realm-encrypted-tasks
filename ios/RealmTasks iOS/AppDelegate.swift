@@ -17,6 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import UIKit
+import RealmSwift
 import RealmLoginKit
 
 @UIApplicationMain
@@ -25,23 +26,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
+        window!.tintColor = Color.listColors()[1]
 
         setAuthenticationFailureCallback {
-            resetDefaultRealm()
-            self.window?.rootViewController = UIViewController()
-            self.logIn()
+            self.logOut()
         }
 
         if canConfigureDefaultRealm() {
             window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoggingInViewController")
             window?.makeKeyAndVisible()
             configureDefaultRealm { success in
-                if success {
-                    self.window?.rootViewController = ContainerViewController()
+                if let user = SyncUser.current, success {
+                    self.afterLogin(with: user)
                 } else {
-                    logout { _ in
-                        self.logIn(animated: true)
-                    }
+                    self.logOut()
                 }
             }
         } else {
@@ -56,37 +54,81 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let loginController = LoginViewController(style: .darkTranslucent)
         loginController.isServerURLFieldHidden = true
         loginController.isRememberAccountDetailsFieldHidden = true
-        loginController.serverURL = Constants.syncAuthURL.absoluteString
+        loginController.serverURL = Config.shared.syncAuthURL.absoluteString
         loginController.authenticationProvider = ZeroKitAuth(zeroKit: ZeroKitManager.shared.zeroKit)
         loginController.loginSuccessfulHandler = { user in
-            ZeroKitManager.shared.zeroKit.whoAmI { userId, error in
-                if let userId = userId {
-                    updateLoggedInUser(zeroKitUserId: userId, realmUser: user)
-                    setDefaultRealmConfiguration(with: user) { error in
-                        if let error = error {
-                            self.window?.rootViewController?.dismiss(animated: false) {
-                                self.present(error: error as NSError)
-                            }
-                        } else {
-                            self.window?.rootViewController = ContainerViewController()
-                            self.window?.rootViewController?.dismiss(animated: true, completion: nil)
-                        }
-                    }
-                } else {
-                    if let error = error {
-                        self.window?.rootViewController?.dismiss(animated: false) {
-                            self.present(error: error)
-                        }
-                    }
-                    logout { _ in
-                        self.window?.rootViewController = UIViewController()
-                        self.logIn(animated: false)
-                    }
-                }
-            }
+            self.afterLogin(with: user)
         }
 
         window?.rootViewController?.present(loginController, animated: false, completion: nil)
+    }
+
+    private func afterLogin(with user: SyncUser) {
+        ZeroKitManager.shared.zeroKit.whoAmI { userId, error in
+            if let userId = userId {
+                self.setUpProfile(userId: userId, realmUserId: user.identity!) { error in
+                    if error == nil {
+                        updateLoggedInUser(zeroKitUserId: userId, realmUser: user)
+                        setDefaultRealmConfiguration(with: user) { error in
+                            if let error = error {
+                                self.window?.rootViewController?.dismiss(animated: false) {
+                                    self.present(error: error as NSError)
+                                }
+                            } else {
+                                self.window?.rootViewController = self.loggedInViewController()
+                                self.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                            }
+                        }
+                    } else {
+                        self.logOut()
+                    }
+                }
+            } else {
+                self.logOut()
+            }
+        }
+    }
+
+    private func setUpProfile(userId: String, realmUserId: String, completion: @escaping (Error?) -> Void) {
+        ZeroKitManager.shared.backend.getPublicProfile(for: userId) { profileJson, error in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            var profile = [String: Any]()
+
+            if let profileJson = profileJson,
+                let data = profileJson.data(using: .utf8),
+                let jsonObj = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String : Any] {
+                profile = jsonObj
+            }
+
+            if let storedId = profile[PublicProfileField.realmUserId.rawValue] as? String, storedId == realmUserId {
+                completion(nil)
+            } else {
+                profile[PublicProfileField.realmUserId.rawValue] = realmUserId
+                let data = try! JSONSerialization.data(withJSONObject: profile, options: [])
+                ZeroKitManager.shared.backend.storePublicProfile(data: String(data: data, encoding: .utf8)!) { error in
+                    completion(error)
+                }
+            }
+        }
+    }
+
+    func logOut() {
+        self.window?.rootViewController = UIViewController()
+        let alert = UIAlertController(title: "Logging out...", message: nil, preferredStyle: .alert)
+        self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+        logoutServices { _ in
+            alert.dismiss(animated: true) {
+                self.logIn()
+            }
+        }
+    }
+
+    private func loggedInViewController() -> UIViewController {
+        return UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
     }
 
     func present(error: NSError) {
@@ -94,9 +136,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 message: error.localizedFailureReason ?? error.description,
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
-            logout { _ in
-                self.logIn()
-            }
+            self.logOut()
         })
         window?.rootViewController?.present(alertController, animated: true, completion: nil)
     }
