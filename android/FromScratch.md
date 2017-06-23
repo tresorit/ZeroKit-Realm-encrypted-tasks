@@ -1,4 +1,4 @@
-# Start your E2EE Android app from Scratch
+# Start your E2EE Realm Android app from Scratch
 This tutorial walks you through how to integrate ZeroKit into your existing Realm Android app.
 
 ## Prerequisite
