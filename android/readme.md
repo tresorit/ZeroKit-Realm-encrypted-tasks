@@ -21,11 +21,11 @@ Open up your ZeroKit management portal at https://manage.tresorit.io; you'll nee
 
 Scroll down to open up your realm identity provider:
 
-<img src=".images/zerokit-basic-idpclientedit.png">
+<img src="/.images/zerokit-basic-idpclientedit.png">
 
 This is where you can grab the Client ID parameter from:
 
-<img src=".images/zerokit-idp-copy1.png" width="60%">
+<img src="/.images/zerokit-idp-copy1.png" width="60%">
 
 **Go back to Android Studio and open the zerokit.properties** config file under *app/src/main*:
 **Replace all 4 values**: 
@@ -42,35 +42,35 @@ objectserver=IP of your ROS with port, by default it's 10.0.2.2:9080 - see Note 
 ## Step 3: Test-drive the app
 Choose one of the latest emulator devices, for example **Google's Pixel XL**, and run the app:
 
-<img src=".images/android-sample-login.png" width="40%">
+<img src="/.images/android-sample-login.png" width="40%">
 
 Once the app started up, **REGISTER a user with a test-user-** prefix, such as **test-user-Alice**:
 
-<img src=".images/android-sample-reg.png" width="40%">
+<img src="/.images/android-sample-reg.png" width="40%">
 
 **Note**: the test-user- prefix will get your user account automatically approved in your sandbox tenant. Otherwise, your new user registration will stuck without validation and won't be able to log in.
 
 Once logged in with the user, create a new task list with the (plus) sign:
 
-<img src=".images/android-sample-list.png" width="40%">
+<img src="/.images/android-sample-list.png" width="40%">
 
 Open the list and add task items:
 
-<img src=".images/android-sample-tasks.png" width="40%">
+<img src="/.images/android-sample-tasks.png" width="40%">
 
 **These task items are now all end-to-end encrypted. Check out the tasks' titles using a Realm Object Browser**:
 
 Browse to your Realm server's Realms list: http://localhost:9080/#!/realms and find Alice's *realmtasks* realm. Copy the link's address:
 
-<img src=".images/realm-dashboard-realms.png" width="80%">
+<img src="/.images/realm-dashboard-realms.png" width="80%">
 
 Open Realm Object Browser, paste the Url into the Realm URL box and delete the highlighted part. Enter your Realm admin username & password and hit Open:
 
-<img src=".images/realm-browser-login.png" width="40%">
+<img src="/.images/realm-browser-login.png" width="40%">
 
 Check out the Tasks collection inside the realm, it's end-to-end encrypted!
 
-<img src=".images/realm-browser-e2ee.png" width="50%">
+<img src="/.images/realm-browser-e2ee.png" width="50%">
 
 You can now log out with the → sign, create another test-user- user and share task lists with each other as in this video.
 The ZeroKit SDK seamlessly handles the encryption keys for the realms.
