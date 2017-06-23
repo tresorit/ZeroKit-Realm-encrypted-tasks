@@ -134,7 +134,7 @@ If you're past this, you deserve one more tap on the shoulder, we're almost ther
 
 ## 4. And finally: deploy the ZeroKit NodeJS backend!
 
-**Download** the ZeroKit backend repo from https://github.com/tresorit/ZeroKit-NodeJs-backend-sample-realm
+**Download** the [ZeroKit backend repo](https://github.com/tresorit/ZeroKit-NodeJs-backend-sample-realm)
 
  Or even simpler, **clone it** using the git client:
  
@@ -189,7 +189,7 @@ Tadam! Your E2EE Realm backend (sandbox) is ready.
 
 Click the iOS/Android icon to follow setup instructions:
 
-[<img src=".images/ios-logo.png" width="100">](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/ios/README.md)[<img src=".images/android-logo.png" width="100">](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/android/readme.md)
+[<img src=".images/ios-logo.png" width="100">](ios/README.md)[<img src=".images/android-logo.png" width="100">](android/readme.md)
 
 Or start from Scratch: [iOS](ios/FromScratch.md)   [Android](android/FromScratch.md)
 
