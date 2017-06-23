@@ -4,6 +4,7 @@ Follow these instructions to set up your End-to-End Encrypted Realm solution's b
 ## Architecture Overview
 The solution consists of 3 components:
 
+
 1. **Realm Object Server (ROS)**: stores realms and provides realtime sync of realms between ROS and mobile devices.
 2. **ZeroKit cloud account**: a ZeroKit cloud tenant authenticates your users with ROS and stores their (encrypted) encryption keys;
 3. **ZeroKit backend server**: this server will run your user account verification code for newly registered users. To keep the demo simple, we won't validate your users for now: they'll be auto-validated if they sign up with a username that starts with a test-user- prefix, such as test-user-Alice
