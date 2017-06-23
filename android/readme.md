@@ -17,7 +17,7 @@ Open it up in Android Studio
 ## Step 2: Connect app to ZeroKit and Realm
 Open up your ZeroKit management portal at https://manage.tresorit.io; you'll need the following values for your app config:
 
-<img src=".images/zerokit-basic-settings.png">
+<img src="/.images/zerokit-basic-settings.png">
 
 Scroll down to open up your realm identity provider:
 
