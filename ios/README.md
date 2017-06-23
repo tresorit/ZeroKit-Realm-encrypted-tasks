@@ -1,5 +1,6 @@
-# RealmTasks iOS with Zerokit
-The original [RealmTasks iOS](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Apple) sample app extended with the functionality of [Zerokit SDK](https://github.com/tresorit/ZeroKit-iOS-SDK).
+# End-to-End Encrypted RealmTasks iOS app
+
+In this tutorial, we'll get you set up with an end-to-end encrypted version of the [RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Apple), a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
 
 ## Features
 * Login / Registration using ZeroKit authentication.
@@ -9,46 +10,87 @@ The original [RealmTasks iOS](https://github.com/realm-demos/realm-tasks/tree/ma
 * Share task lists.
 * Revoke sharing.
 
-## Requirements
-  - **Xcode 8.1+**
-  - **Backend:** An installed and working ZeroKit-Realm backend, according to [this description](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks).
+## Prerequisites
 
-## Configuration
-First we will walk you through the backend setup, then we will configure ZeroKit and Realm for the application.
+* E2EE Realm backend installed: if you haven't done it yet, do this first: https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/README.md
+* Xcode 8.1+
 
-### Backend
-The example app requires a backend to function. The previous guide in the root of this repository describes a backend that you can use for this app. You can find the backend and setup instructions [here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks).
+## Step 1: Download app
+**Download the sample app** from https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/tree/master/ios to your Mac
 
-If your backend is up and running, you can move on with the configuration of the mobile app.
+Open it up in Xcode
 
-### Zerokit & Realm
+## Step 2: Connect app to ZeroKit and Realm
+Open up your ZeroKit management portal at https://manage.tresorit.io; you'll need the following values for your app config:
 
-In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitAPIBaseURL`, `ZeroKitClientId`, `ZeroKitAppBackend`, `RealmPort` and `RealmHost` keys:
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A1Portal.png">
+
+Scroll down to open up your realm identity provider:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A2Client%20added.png">
+
+This is where you can grab the Client ID parameter from:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A3client.png" width="60%">
+
+In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitAPIBaseURL`, `ZeroKitClientId`, `ZeroKitAppBackend`, `RealmPort` and `RealmHost`:
 
 ```xml
 <key>RealmPort</key>
 <integer>9080</integer>
 <key>RealmHost</key>
-<string>{Your realm host, eg. IP address}</string>
+<string>Your realm host, eg. 10.0.2.2</string>
 <key>ZeroKitServiceURL</key>
-<string>{Your ZeroKit Service URL}</string>
+<string>This is your Service URL https://abcde12345.api.tresorit.io</string>
 <key>ZeroKitClientId</key>
-<string>{Your ZeroKit Client ID}</string>
+<string>This is your Client ID abcde12345_fghij67890</string>
 <key>ZeroKitAppBackend</key>
-<string>{Your ZeroKit Sample Backend URL}</string>
+<string>This is your ZeroKit node backend http://10.0.2.2:3000</string>
 ```
 
-- `RealmPort`: Your Realm Object Server port. Default is 9080.
-- `RealmHost`: Your Realm Object Server host, eg. the IP address such as "10.0.100.43".
-- `ZeroKitAPIBaseURL`: This is your tenant's service URL. You can find this URL on the [management portal](https://manage.tresorit.io).
-- `ZeroKitClientId`: This is the client ID for your OpenID Connect client that you wish to use with your mobile. You can manage OpenID connect clients on the [management portal](https://manage.tresorit.io).
-- `ZeroKitAppBackend`: This is the URL of the sample application backend.
+# Step 3: Test-drive the app
 
-Now you are ready to **Build and Run** (**⌘R**) the example in Xcode.
+You are now ready to **Build and Run** (**⌘R**) the app in Xcode!
 
-## Application
+## Step 3: Test-drive the app
+Choose one of the latest emulator devices, for example **Google's Pixel XL**, and run the app:
 
-The app contains the source code of the original sample app of the [RealmTasks iOS](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Apple) extended with the **Zerokit SDK**.
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A4Startup.png" width="40%">
+
+Once the app started up, **REGISTER a user with a test-user-** prefix, such as **test-user-Alice**:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A5Reg.png" width="40%">
+
+**Note**: the test-user- prefix will get your user account automatically approved in your sandbox tenant. Otherwise, your new user registration will stuck without validation and won't be able to log in.
+
+Once logged in with the user, create a new task list with the (plus) sign:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A6List.png" width="40%">
+
+Open the list and add task items:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A7Tasks.png" width="40%">
+
+**These task items are now all end-to-end encrypted. Check out the tasks' titles using a Realm Object Browser**:
+
+Browse to your Realm server's Realms list: http://localhost:9080/#!/realms and find Alice's *realmtasks* realm. Copy the link's address:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A8Dashboard.png" width="80%">
+
+Open Realm Object Browser, paste the Url into the Realm URL box and delete the highlighted part. Enter your Realm admin username & password and hit Open:
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A9Login.png" width="40%">
+
+Check out the Tasks collection inside the realm, it's end-to-end encrypted!
+
+<img src="https://github.com/davidszabo26/RealmTempImgs/blob/master/.images/A10E2EE.png" width="50%">
+
+You can now log out with the → sign, create another test-user- user and share task lists with each other as in this video.
+The ZeroKit SDK seamlessly handles the encryption keys for the realms.
+
+## How the app works?
+
+The app contains the source code of the original [RealmTasks iOS app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Apple) extended with the **Zerokit SDK**.
 
 * The text content of the `Task` and `TaskList` objects are encrypted by ZeroKit, so unauthorized users cannot access this data.
 * The `TaskListList` is shareable, so it is now possible to provide access rights for different users to handle the same task list.
@@ -59,13 +101,10 @@ The app contains the source code of the original sample app of the [RealmTasks i
 * `ZeroKit`: The `ZeroKitManager` singleton provides access to a `ZeroKit` instance to handle encryption and decryption of data, and user authentication with the ZeroKit service.
 * `Backend`: Most of the cryptographic operations (including invites and sharing) must be done client side by the SDK library. To provide control over these operations, and to prevent possible abuse by tampering the client, we introduced the admin API. All client initiated changes which has a permanent effect on the server has to be approved through the Admin API (typically by the server backend of the integrated app). The communication with the backend is implemented in the `Backend.swift` file.
 
-### Third Party Dependencies
+### 3rd-party libraries used
+
 - [ZeroKit](https://github.com/tresorit/ZeroKit-iOS-SDK): ZeroKit is a simple, breach-proof user authentication and end-to-end encryption library.
 - [RealmSwift](https://github.com/realm/realm-cocoa/tree/master/RealmSwift): Realm Swift enables you to efficiently write your app’s model layer in a safe, persisted and fast way.
 - [RealmLoginKit](https://github.com/realm-demos/realm-loginkit): A generic interface for logging in to Realm Mobile Platform apps.
 - [Cartography](https://github.com/robb/Cartography): A declarative Auto Layout DSL for Swift.
 - [SwiftLint](https://github.com/realm/SwiftLint): A tool to enforce Swift style and conventions.
-
-## Contact
-
-Contact us at [zerokit@tresorit.com](mailto:zerokit@tresorit.com).
