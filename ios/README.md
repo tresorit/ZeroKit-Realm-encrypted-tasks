@@ -55,21 +55,21 @@ You are now ready to **Build and Run** (**⌘R**) the app in Xcode!
 ## Step 3: Test-drive the app
 Choose one of the latest emulator devices, for example **Google's Pixel XL**, and run the app:
 
-<img src="/.images/android-sample-login.png" width="40%">
+<img src="/.images/ios-sample-login.png" width="40%">
 
 Once the app started up, **REGISTER a user with a test-user-** prefix, such as **test-user-Alice**:
 
-<img src="/.images/android-sample-reg.png" width="40%">
+<img src="/.images/ios-sample-reg.png" width="40%">
 
 **Note**: the test-user- prefix will get your user account automatically approved in your sandbox tenant. Otherwise, your new user registration will stuck without validation and won't be able to log in.
 
-Once logged in with the user, create a new task list with the (plus) sign:
+Once logged in with the user, create a new task list with the (plus) sign and tap in it:
 
-<img src="/.images/android-sample-list.png" width="40%">
+<img src="/.images/is-sample-empty.png" width="40%">
 
 Open the list and add task items:
 
-<img src="/.images/android-sample-tasks.png" width="40%">
+<img src="/.images/ios-sample-tasks.png" width="40%">
 
 **These task items are now all end-to-end encrypted. Check out the tasks' titles using a Realm Object Browser**:
 
