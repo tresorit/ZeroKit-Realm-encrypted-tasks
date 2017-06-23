@@ -20,6 +20,8 @@ backend.initRegistration(username: username, profileData: "") { userId, regSessi
 }
 ```
 
+Check out the [Registration flow in the ZeroKit SDK's documentation](https://tresorit.com/zerokit/docs/Common_flows.html) for more information
+
 ## Step 2: Login
 First you have to log in with the ZeroKit user, then you can request credentials to authenticate with Realm using the custom token method.
 
@@ -95,7 +97,7 @@ If you're a member of a tresor (either you created it or somebody else shared it
   * Encrypt data before you put it into the realm,
   * Decrypt data when you read it from the realm:
 
-```
+```swift
 // Example Chat message Realm object with encrypted message content.
 class ChatMsg: Object {
     private dynamic var msg = ""
