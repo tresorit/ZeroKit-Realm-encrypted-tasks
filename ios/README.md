@@ -65,7 +65,7 @@ Once the app started up, **REGISTER a user with a test-user-** prefix, such as *
 
 Once logged in with the user, create a new task list with the (plus) sign and tap in it:
 
-<img src="/.images/is-sample-empty.png" width="40%">
+<img src="/.images/is-sample-tasks-empty.png" width="40%">
 
 Open the list and add task items:
 
