@@ -1,146 +1,203 @@
-# End-to-end encrypted infrastructure for mobile apps
-This tutorial will guide you through the steps of deployment and configuration of an advanced backend infrastructure which support end-to-end encrypted, reactive mobile apps. At the end you can try it out with an encryption-enabled todo-list app.
-The reactive mobile backend is based on Realm Mobile Platform while the encryption is brought to you by Tresorit's ZeroKit platform.
+# E2EE Realm Backend Setup
+Follow these instructions to set up your End-to-End Encrypted Realm solution's backend components. 
 
-## Infrastructure
-An infrastructure for such an advanced systems contains several items and services. For a ZeroKit-Realm based infrastructure consider the following architecture.
+## Architecture Overview
+The solution consists of 3 components:
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/zerokit-realm-architecture.PNG)
+1. **Realm Object Server (ROS)**: stores realms and provides realtime sync of realms between ROS and mobile devices.
+2. **ZeroKit cloud account**: a ZeroKit cloud tenant authenticates your users with ROS and stores their (encrypted) encryption keys;
+3. **ZeroKit backend server**: this server will run your user account verification code for newly registered users. To keep the demo simple, we won't validate your users for now: they'll be auto-validated if they sign up with a username that starts with a test-user- prefix, such as test-user-Alice
 
-The boxes on the picture are infrastructure items. The green "APP" box is the mobile application itself which consumes the infrastructure backend (represented by the three other boxes). As you can see, the application includes both Realm and ZeroKit mobile SDKs, and communicates with all backend nodes through the internet.
+On the other end of the wire, your mobile apps will be using Realm's and ZeroKit's mobile SDKs to sync realms and seamlessly end-to-end encrypt data.
 
-The three other boxes together form the backend infrastructure for the mobile app. You can imagine them as separate services / servers.
+<img src=".images/zerokit-realm-architecture.PNG">
 
-The "ROS" labelled one is represents an installed Realm Object Server, which can be deployed anywhere (in the cloud, on your machine, in a VM in your desktop etc.) The only requirement is that it must be accessible by the mobile application and the ROS must access the internet, so it can communicate with the ZeroKit service. As you can see, a ZeroKit authentication module is deployed for the ROS, to enable ZeroKit-based secure authentication. This module needs internet access to reach ZeroKit service. (Communication flows are marked by arrows on the picture).
-ROS itself provides the reactive backend and data store for the mobile application.
+## Flow overview
+To begin, you'll need a Mac or Linux to host the backend components.
 
-ZeroKit example server is a small NodeJS application provided by Tresorit. This app can be hosted by you on your machine or in a VM - typically for development, or in the cloud - for production use cases. This app handles all the administrative communication between the app and the ZeroKit service, and also provides a structured data store for the system (mostly for administrative data, as ROS itself is a database).
-As you can see, this app needs a backend database. By default, this database is a MongoDB instance, but it can be changed easily by implementing the storage service of it for different data stores.
-In this tutorial we will install the sample server into MS Azure Cloud along with the needed MongoDB (DocumentDb) instance.
-**Note:** Wherever this server is installed, it must be under the control of the system owner, and must not be accessible for administration by Tresorit or other parties.
+1. You'll start by signing up for a free ZeroKit account and prepare it to work with Realm.
+2. If you don't have Realm Object Server (ROS) installed already, you'll need to install it. If you have one, update it to the latest version.
+3. You'll then turn on ZeroKit's ultra-secure auth in ROS. This step is required for ZeroKit to work and ensures that your user auth is as secure as your E2EE Realm is. Otherwise, hackers will hack your users' accounts and breach passwords to hack your Realm that way.
+4. Finally, you'll install the ZeroKit NodeJS backend. You can later enter your user account validation code (email or phone number validation for example) into this NodeJS app. 
 
-The ZeroKit service is a hosted online service provided by Tresorit AG. ZeroKit handles all the management flows silently which are needed to provide a shareable, zero-knowledge, end-to-end encryption platform for your users. You can get a free sandbox account for development at https://manage.tresorit.io by a simple registration. You can configure your ZeroKit sandbox tenant on the same webpage.
+And now, here's the step-by-step instructions for each step:
 
-## I. Register a ZeroKit tenant
-**Info:** You can skip this step if you already has a ZeroKit tenant.
+## 1. Sign up for ZeroKit and prepare it to work with Realm
+Go to https://manage.tresorit.io and get yourself a free account.
 
-Please navigate to https://manage.tresorit.io and register yourself a free sandbox account. After the first login the system will automatically provision you a free sandbox ZeroKit tenant, which can be used for free for development purposes.
+  Check your email for the confirmation email to verify your email address, then log in to your new account at https://manage.tresorit.io.
 
-## II. Configure tenant
-Please log in to the ZeroKit admin portal at https://manage.tresorit.io. After successful login you will see the main configuration page of your tenant.
-On the first few lines you will find the basic configuration values of your tenant: service url, admin user id and administrative keys. You will need these values later during the configuration of the other system components. 
+This is what you'll see: note below where your ZeroKit tenant's Service URL, Admin user ID and Admin keys are on the portal, you will need these values later when configuring the products.
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/zerokit-basic-settings.PNG)
+<img src=".images/zerokit-basic-settings.png">
 
-**Warning:** You can come back here anytime to copy these values. Please never copy and store them at any other place.
+Later, you'll need your tenant's admin key. This is how you can copy it to the clipboard: click on the Load primary Admin key then to the Copy button:
 
-If you scroll down a bit, you will find a section called "Identity provider". This is where you can configure the built-in [OpenID Connect](https://openid.net/connect/) authentication provider module of the ZeroKit service. In this step we will add a new IDP client configuration which will be used by the mobile apps and the ROS backend for login.
+<img src=".images/zerokit-basic-adminkey.png">
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/zerokit-idp-settings.PNG)
+Scroll down and find the Identity provider section.
 
-Click on the "Add client" button and complete the form according to the following instructions:
+<img src=".images/zerokit-basic-idpaddsdk.png">
 
-* The name can be your choice, its only used by the portal to identify your client.
-* Please add the following redirect URL: "https://*{client_id}*.*{tenant_id}*.api.tresorit.io/", where you substitute *{client_id}* for the id of the actual client, and *{tenant_id}* is the id of your tenant. This special URL format is needed only by the mobile app (SDK) clients.
-  **Important:** Notice the necessary slash ("/") at the end of the URL.
-* Please set the client flow to "Hybrid"
-* Click apply. (It can take 2-5 minutes for the changes to be effective).
+**Click Add SDK client**:
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/zerokit-realm-idp-client.png)
+* Name the client as you'd like
+* Click Apply
 
-## III. Install Realm Object Server (ROS)
-**Info:** You can skip this step if you already have ROS installed.
+<img src=".images/zerokit-idp-new" width="60%">
 
-Please navigate to https://realm.io/products/realm-mobile-platform/ and follow the instructions according to your platform to install a ROS instance for yourself. Any up-to-date edition of ROS will do for this setup.
+Once applied, a new client will show up on the portal:
 
-## IV. Configure authentication
-**Prerequisites:** You will need [NodeJS, NPM](https://nodejs.org/en/download/current/) and git installed on your machine. We recommend to install these utilities through the default package manager of your OS. ([How to install NodeJS from package manager.](https://nodejs.org/en/download/package-manager))
+<img src=".images/zerokit-basic-idpclients.png">
 
-To enable ZeroKit based authentication, you have to install the ZeroKit-Realm authentication module for ROS. The module is open-source, you can find it on GitHub: https://github.com/tresorit/ZeroKit-Realm-auth-provider
+We're done with this step! Tap yourself on the shoulder.
 
-To install the module for ROS, please open a terminal *on the same machine* where ROS is installed, and run the following command 
+## 2. Install ROS
+**Don't have ROS? Get the latest release here**: https://realm.io/docs/realm-object-server/#install-realm-object-server
+When finished, skip to Step 3
+
+**Already have ROS?** Check its version by browsing to the Realm dashboard: by default it's http://localhost:9080
+
+<img src=".images/realm-dashboard-port.png" width="80%">
+
+* 1.6.1 or higher? You're good.
+* Below 1.6.1? you need to upgrade as your version won't support custom authentication providers and won't work with ZeroKit. Upgrade at https://realm.io/docs/realm-object-server/#upgrading
+
+## 3. Turn on ZeroKit's ultra-secure auth in ROS
+**First, install the latest Node.js** from https://nodejs.org. If you have one already, upgrade to the current version.
+
+**Now, install the ZeroKit auth module for ROS** by opening a terminal on the machine where ROS is installed, and running the following command:
+
 ```bash
 curl -sL https://github.com/tresorit/ZeroKit-Realm-auth-provider/raw/master/install.sh | sudo -E bash -
 ```
-**Notes:**
- - if you need more help or want to install it manually, you can find more detailed description in the module's repository on GitHub
- - curl utility should be installed by default if you are using OsX or Ubuntu, but if not, you may install it with the package manager of your system.
 
-The script will automatically install the module and will produce a code snippet which should be inserted into the configuration file of ROS **under** the **"auth/providers"** section. (please do not copy "*auth:*" and "*providers:*" tags themselves).
+The script will install the auth module and produce a code snippet to the console which you'll need to copy & paste into Realm's configuration.yml config file.
 
-> Realm Object Server's config file can be found at this location, according to your platform:
-  >   - On linux: /etc/realm/configuration.yml
-  >   - On OsX:   {realm-mobile-platform-directory}/realm-object-server/object-server/configuration.yml
+> By default, you can find **configuration.yml**:
+  > * On linux: /etc/realm
+  > * On OsX: {realm-mobile-platform-directory}/realm-object-server/object-server/
 
-  **Configuration block of ZeroKit auth module for ROS:**
- This is just an example, please use the code snippet produced by the installer as it may contain further modifications.
+**Note**: Your current Realm config file probably already contains the "auth:" and "providers:" sections: don't duplicate these, copy only the contents from under "providers:"
+Use your favorite Linux text editor (if you don't have one, check out vim or nano). Don't forget to start the command with sudo to start the editor as a root!
+
 ```yml
 auth:
-  providers:
-    # This enables login via ZeroKit's secure identity provider
-    custom/zerokit:
-      # The client ID of the IDP client created for the Realm object server
-      # on ZeroKit management portal (https://manage.tresori.io)
-      client_id: 'example_client'
-      
-      # The client secret of the IDP client created for the Realm object server
-      # on ZeroKit management portal (https://manage.tresori.io)
-      client_secret: 'example_secret'
-      
-      # The service URL of your ZeroKit tenant. It can be found on the main
-      # configuration page of your tenant on ZeroKit management portal
-      # (https://manage.tresori.io)
-      service_url: 'https://example.api.tresorit.io'
-  
-      # The include path to use for including ZeroKit auth implementation.
-      # Usually it's /usr/local/zerokit/zerokit-realm-auth-provider
-      include_path: '/usr/local/zerokit/zerokit-realm-auth-provider'
-      
-      # This refers to the actual implementation (should be zerokitauth)
-      implementation: 'zerokitauth'
+    providers:
+
+#Copy it from here
+custom/zerokit:
+
+    # Grab the following 3 values from your ZeroKit management portal (https://manage.tresori.io):
+    client_id: 'abcd1234_efgh5678'
+
+    # Copy the Client Secret field's value here:
+    client_secret: 'abcd1234_IjKL9012MNoP'
+
+    # Copy here the service URL from your ZeroKit portal
+    service_url: 'https://zkrandomid.api.tresorit.io'
+
+    # Leave it as-is
+    include_path: '/usr/local/zerokit/zerokit-realm-auth-provider'
+
+    # Leave it as-is
+    implementation: 'zerokitauth'
 ```
 
-After you have copied the snippet into the configuration file, please edit it and change:
+**Replace**: **client_id**, **client_secret** and **service_url** in configuration.yml with the values on the ZeroKit portal at https://manage.tresorit.io:
 
-* *Client ID* for the id of the IDP client you have configured in the second step of the tutorial
-* *Client secret* for the secret string of the same IDP client
-* *Service uri* for the service uri of your tenant (you can find the value on the main config page)
+Now, open up the realm client you created previously on the ZeroKit admin portal:
 
-Now you can restart ROS to pick up new config. On MAC simply close and restart the startup script of the server, on Linux please type the following line in a terminal:
+<img src=".images/zerokit-basic-idpclientedit.png">
+
+You can grab the Client ID and Client Secret values from here:
+
+<img src=".images/zerokit-idp-copy2.png" width="60%">
+
+Cancel this window and copy the Service URL from the top of the main page:
+
+<img src=".images/zerokit-basic-settings.png">
+
+Now, restart ROS. On a Mac, just close and restart the ROS command, on Linux type:
+
 ```bash
-sudo systemctl restart realm-object-server
+sudo systemctl stop realm-object-server
+sudo systemctl start realm-object-server
 ```
 
-If the server has started successfully (you can access the Realm dashboard in a browser), then you have completed the ROS configuration and you can move to the next section. On a failure you can try to start the server manually from a command line to see the error which prevents it from starting.
+To check if ROS started up successfully, **browse to port 9080**.
+If the page doesn't load, you probably made a typo in the config file? If it's not the config file, check the console for hints (Mac) or /var/log/realm-object-server.log (Linux).
 
-## One-click template deployment of sample server
-Next step is to install the ZeroKit sample backend server. You can find the source code and the manual install instructions (for non-Azure deployments) on [GitHub](https://github.com/tresorit/ZeroKit-NodeJs-backend-sample), but in this tutorial we will use a one-click Azure deployment to create a new infrastructure in MS Azure Cloud for it. (For this you will need a MS Azure subscription account.)
+**If this is a new ROS, register an admin user** on the Realm dashboard in your browser on port 9080.
 
-The repository for the one-clieck installer can be found [here](https://github.com/tresorit/ZeroKit-Azure-backend-sample). if you need any more help with this app, you can find it there.
+If you're past this, you deserve one more tap on the shoulder, we're almost there...
 
-Please click on this button to proceed with the installation. After you click, the Azure portal will ask for a few settings and then it will deploy a new resource group with a web application (sample server) and an Azure DocumentDB with MongoDB interface. This kind of deployment is scaleable and also suitable or production infrastructures.
+## 4. And finally: deploy the ZeroKit NodeJS backend!
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Ftresorit%2FZeroKit-Azure-backend-sample%2Fraw%2Fmaster%2FZeroKitNodejsSampleDeployment%2Fazuredeploy.json" target="_blank"> <img src="http://azuredeploy.net/deploybutton.png"/></a>
+**Download** the ZeroKit backend repo from https://github.com/tresorit/ZeroKit-NodeJs-backend-sample-realm
 
-After you have clicked and logged in to Azure portal, you should see this screen:
+ Or even simpler, **clone it** using the git client:
+ 
+ ```bash
+ git clone https://github.com/tresorit/ZeroKit-NodeJs-backend-sample-realm.git
+ ```
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/azure-template-deployment.png)
+ **Then, edit config.json - see Step 1 above for screenshots** of where to copy the values from:
+ 
+ ```yml
+ {
+    "baseUrl": "Your server's Url, no port needed. If you're on localhost, use http://10.0.0.2 (due to Android emulator limitation)",
+    "appOrigins": [],
+    "zeroKit": {
+      "serviceUrl": "Replace with the Service URL from the ZeroKit portal",
+      "adminUserId": "Replace with the Admin user ID from the ZeroKit portal",
+      "adminKey": "Replace with the Primary Admin Key from the ZeroKit portal",
+      "sdkVersion": "4",
+      "idp": [
+        {
+          "clientID": "Replace with the client id of the new client you created on the ZeroKit portal",
+          "clientSecret": "Replace with the client secret",
+          "callbackURL": "Replace with the https:// URL from below your client secret"
+        }
+      ]
+    }
+  }
+  ```
+  
+When you saved the config file, open a console and cd into the root of the NodeJS repo
 
-The non-zkit properties and instance sizes are completely your choice. You can change the resource sizes later any time on the Azure portal.
+* First, install it:
 
-The tenant settings are the settings from the ZeroKit management portal (from the second step). Please copy them along with the IDP client settings created in the same step and proceed the deployment.
+  ```bash
+  npm install
+  ```
 
-After the deployment finished (about 5 minutes), please find and open the configuration page of the web app. In the "Application settings" tab you can change the settings of the server any time.
+* Then run it:
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/azure-webapp-config.png)
+  ```bash
+  npm start
+  ```
 
-On the "Overview" tab you can find the address of your new web app. Please note that this app is a backend API for applications, so if you navigate to the given address from a browser the app will always produce a 404 Not found error, which is not an error, this is the expected behavior.
+**Test it by browsing to port 3000** of your server where you should see a status message.
+If it gives you a 404/NOT FOUND or an error, look at the console for cues on the issue.
 
-![enter image description here](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/raw/master/.images/azure-webapp-overview.png)
+Tadam! Your E2EE Realm backend (sandbox) is ready.
+**Note**: this is not a production-ready E2EE Realm deployment, but it's perfect for testing. Check the last section of this document for a live-production checklist.
 
-## Configure and build mobile applications
-Last step is to check out, configure and build the mobile applications. You can find the platform-specific guide on the following links:
 
-  * **Android:** [https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/tree/master/android](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/tree/master/android)
+## Next up: test drive the E2EE RealmTasks sample app
 
-**Note:** Currently only the android version is available, the iOS version is expected to follow in 1-2 weeks.
+Click the iOS/Android icon to follow setup instructions:
+
+[<img src=".images/ios-logo.png" width="100">](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/ios/README.md)[<img src=".images/android-logo.png" width="100">](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/android/readme.md)
+
+Or start from Scratch (iOS and Android): [link here]
+
+## Live production checklist
+
+Although your E2EE (sandbox) environment is now ready for play, there are a few things left before you take it to live production:
+
+1. **Implement user account validation**: in the sandbox, newly registered users (with a test-user- prefix) are auto-approved. This way, you've no control over who signs up for your app and whether their email address/phone numbers are valid: it's messy and unsecure. Add your own user validation code to be called following user registration in the finishedRegistration function in app.js of the ZeroKit node backend you deployed in Step 4.
+2. **Set up HTTPS**: get certs and set up HTTPS for your Realm and ZeroKit backends. Even though everything goes end-to-end encrypted, it's important to add an additional layer of security at transport.
+3. **Get a ZeroKit production tenant**: sign up for a production ZeroKit tenant by emailing us at zerokit@tresorit.com
+4. **Large-scale**: large E2EE Realm deployments are best with Realm's Professional or Enterprise Editions and with a production scalable ZeroKit deployment. Learn more about Realm editions at https://realm.io/pricing. Check out a Scalable Azure-deployable ZeroKit backend installation at https://github.com/tresorit/ZeroKit-Azure-backend-sample
