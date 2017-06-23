@@ -1,4 +1,4 @@
-# Start your E2EE iOS app from Scratch
+# Start your E2EE Realm iOS app from Scratch
 This tutorial walks you through how to integrate ZeroKit into your existing Realm iOS app.
 
 ## Prerequisite
