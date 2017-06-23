@@ -2,6 +2,8 @@
 
 In this tutorial, we'll get you set up with an end-to-end encrypted version of the [RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Android), a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
 
+Would you rather start from scratch? [Check out our from-scratch guide](https://github.com/davidszabo26/ZeroKit-Realm-encrypted-tasks/blob/master/android/FromScratch.md).
+
 <img src="https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/.images/android-sample-screenshot.png" width="40%">
 
 ## Features
