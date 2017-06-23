@@ -2,6 +2,8 @@
 
 In this tutorial, we'll get you set up with an end-to-end encrypted version of the [RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Apple), a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
 
+<img src="/.images/ios-sample-tasks.png" width="40%">
+
 ## Features
 * Login / Registration using ZeroKit authentication.
 * Create / Delete task list.
