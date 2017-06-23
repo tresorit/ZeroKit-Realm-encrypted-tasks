@@ -90,7 +90,10 @@ Be sure the handle errors when any of the sharing steps fail.
 
 ## Step 5: Encrypt and decrypt
 
-If you're a member of a tresor (either you created it or somebody else shared it with you), you can use encrypt and decrypt. Encrypt data before you put it into the realm and decrypt data when you read it from the realm:
+If you're a member of a tresor (either you created it or somebody else shared it with you), you can use encrypt and decrypt the realm's data using the keys stored in the tresor. Thankfully, you don't have to deal with the keys: the ZeroKit SDK will take care of that for you. You just encrypt and decrypt:
+
+  * Encrypt data before you put it into the realm,
+  * Decrypt data when you read it from the realm:
 
 ```
 // Example Chat message Realm object with encrypted message content.
