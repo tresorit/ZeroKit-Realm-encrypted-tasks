@@ -44,7 +44,7 @@ Scroll down and find the Identity provider section.
 * Name the client as you'd like
 * Click Apply
 
-<img src=".images/zerokit-idp-new" width="60%">
+<img src=".images/zerokit-idp-new.png" width="60%">
 
 Once applied, a new client will show up on the portal:
 
