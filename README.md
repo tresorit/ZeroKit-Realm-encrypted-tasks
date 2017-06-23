@@ -191,7 +191,7 @@ Click the iOS/Android icon to follow setup instructions:
 
 [<img src=".images/ios-logo.png" width="100">](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/ios/README.md)[<img src=".images/android-logo.png" width="100">](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/android/readme.md)
 
-Or start from Scratch (iOS and Android): [link here]
+Or start from Scratch: [iOS](ios/FromScratch.md)   [Android](android/FromScratch.md)
 
 ## Live production checklist
 
