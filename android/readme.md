@@ -4,6 +4,14 @@ In this tutorial, we'll get you set up with an end-to-end encrypted version of t
 
 <img src="https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/.images/android-sample-screenshot.png" width="40%">
 
+## Features
+* Login / Registration using ZeroKit authentication.
+* Create / Delete task list.
+* Create / Delete task.
+* Task list and task texts are encrypted by ZeroKit.
+* Share task lists.
+* Revoke sharing.
+
 ## Prerequisites
 
 * E2EE Realm backend installed: if you haven't done it yet, do this first: https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/README.md
