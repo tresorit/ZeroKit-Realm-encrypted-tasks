@@ -2,7 +2,7 @@
 
 In this tutorial, we'll get you set up with an end-to-end encrypted version of the [RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Apple), a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
 
-Would you rather start from scratch? [Check out our from-scratch guide](https://github.com/davidszabo26/ZeroKit-Realm-encrypted-tasks/blob/master/ios/FromScratch.md).
+Would you rather start from scratch? [Check out our from-scratch guide](FromScratch.md).
 
 <img src="/.images/ios-sample-tasks.png" width="30%">
 
@@ -20,9 +20,9 @@ Would you rather start from scratch? [Check out our from-scratch guide](https://
 * Xcode 8.1+
 
 ## Step 1: Download app
-**Download the sample app** from https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/tree/master/ios to your Mac
+**Download the sample app** by cloning this repository or downloading as a [zip file](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/archive/master.zip).
 
-Open it up in Xcode
+Open up `ios/RealmTasks.xcworkspace` in Xcode.
 
 ## Step 2: Connect app to ZeroKit and Realm
 Open up your ZeroKit management portal at https://manage.tresorit.io; you'll need the following values for your app config:
@@ -52,12 +52,8 @@ In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitAPIBaseU
 <string>This is your ZeroKit node backend http://10.0.2.2:3000</string>
 ```
 
-# Step 3: Test-drive the app
-
-You are now ready to **Build and Run** (**⌘R**) the app in Xcode!
-
 ## Step 3: Test-drive the app
-Choose one of the latest emulator devices, for example **Google's Pixel XL**, and run the app:
+You are now ready to **Build and Run** (**⌘R**) the app in Xcode:
 
 <img src="/.images/ios-sample-login.png" width="40%">
 
@@ -67,11 +63,11 @@ Once the app started up, **REGISTER a user with a test-user-** prefix, such as *
 
 **Note**: the test-user- prefix will get your user account automatically approved in your sandbox tenant. Otherwise, your new user registration will stuck without validation and won't be able to log in.
 
-Once logged in with the user, create a new task list with the (plus) sign and tap in it:
+Once logged in with the user a default empty task list, called **My Tasks**, is automatically created for you:
 
 <img src="/.images/ios-sample-tasks-empty.png" width="40%">
 
-Open the list and add task items:
+Tap on the empty list or pull down to add new task items to your list:
 
 <img src="/.images/ios-sample-tasks.png" width="40%">
 
@@ -89,7 +85,7 @@ Check out the Tasks collection inside the realm, it's end-to-end encrypted!
 
 <img src="/.images/realm-browser-e2ee.png" width="50%">
 
-You can now log out with the → sign, create another test-user- user and share task lists with each other as in this video.
+You can now log out on the **Account** tab, create another test-user- user and share task lists with each other as in this video.
 The ZeroKit SDK seamlessly handles the encryption keys for the realms.
 
 ## How the app works?

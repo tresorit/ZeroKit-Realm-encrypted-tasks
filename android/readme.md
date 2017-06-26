@@ -2,7 +2,7 @@
 
 In this tutorial, we'll get you set up with an end-to-end encrypted version of the [RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Android), a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
 
-Would you rather start from scratch? [Check out our from-scratch guide](https://github.com/davidszabo26/ZeroKit-Realm-encrypted-tasks/blob/master/android/FromScratch.md).
+Would you rather start from scratch? [Check out our from-scratch guide](FromScratch.md).
 
 <img src="https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/.images/android-sample-screenshot.png" width="40%">
 
@@ -20,7 +20,7 @@ Would you rather start from scratch? [Check out our from-scratch guide](https://
 * IDE: You will need [Android Studio](https://developer.android.com/studio/index.html) to open and build the project.
 
 ## Step 1: Download app
-**Download the sample app** from https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/tree/master/android to your computer
+**Download the sample app** by cloning this repository or downloading as a [zip file](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/archive/master.zip).
 
 Open it up in Android Studio
 
