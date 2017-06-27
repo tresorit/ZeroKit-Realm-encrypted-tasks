@@ -3,7 +3,7 @@ This tutorial walks you through how to integrate ZeroKit into your existing Real
 
 ## Prerequisite
 
-* E2EE Realm backend installed: if you haven't done it yet, do this first: https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/README.md
+* E2EE Realm backend installed: if you haven't done it yet, do this first: [ZeroKit-Realm-encrypted-tasks](https://github.com/tresorit/ZeroKit-Realm-encrypted-tasks/blob/master/README.md)
 
 ## Step 1: Registration
 Once you completed the installation of your E2EE Realm backend components, you can start to use ZeroKit's authentication to register and log in your users.
@@ -80,30 +80,29 @@ If you're a member of a tresor (either you created it or somebody else shared it
 
 
 ```java
-public class chatMsg extends RealmObject {
+private String msg;
+private String sender;	
+private String tresorId; //Unique ID for keychain that holds keys to this chat
 
-  private String msg;
-  private String sender; 
-  private String tresorId; //Unique ID for keychain that holds keys to this chat
-
-  public void setMsg(String msg) {
-
-    //Encrypt message
-    Response<String, ResponseZerokitError> execute = Zerokit.getInstance().encrypt(tresorId, msg).execute();
-
-    //Error if user doesn’t have access to the keychain
-    this.msg = execute.isError() ? msg : execute.getResult();
-  }
-
-  public String getMsg() {
+public void setMsg(String msg) {
+  //Encrypt message
+  Response<String, ResponseZerokitError> response = Zerokit.getInstance().encrypt(tresorId, msg).execute();
     
-    //Decrypt message
-    Response<String, ResponseZerokitError> execute = Zerokit.getInstance().decrypt(msg).execute();
-
+  if (!response.isError())
+    this.msg = response.isError();
+  else
     //Error if user doesn’t have access to the keychain
-    return execute.isError() ? msg : execute.getResult();
-  }
+    //...
+}
 
-  //...
+public String getMsg() {   
+  //Decrypt message
+  Response<String, ResponseZerokitError> response = Zerokit.getInstance().decrypt(msg).execute();
+
+  if (!response.isError())
+    return response.getResult();
+  else
+    //Error if user doesn’t have access to the keychain
+    //...		
 }
 ```

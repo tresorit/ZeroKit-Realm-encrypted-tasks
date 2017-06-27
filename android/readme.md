@@ -1,5 +1,5 @@
 # End-to-End Encrypted RealmTasks Android app
-In this tutorial, we'll get you set up with an end-to-end encrypted version of the [RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Android), a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
+In this tutorial, we'll get you set up with an end-to-end encrypted version of the **[RealmTasks app](https://github.com/realm-demos/realm-tasks/tree/master/RealmTasks%20Android)** with **[ZeroKit-Android-SDK](https://github.com/tresorit/ZeroKit-Android-SDK)**, a basic task management app, designed as a homage to [Realmac Software's Clear app](http://realmacsoftware.com/clear), with their knowledge and permission.
 
 Would you rather start from scratch? [Check out our from-scratch guide](FromScratch.md).
 <img src="../.images/android-sample-screenshot.png" alt="Android App screenshot" width="444"/>
@@ -57,6 +57,8 @@ objectserver=ip with port of your object server (e.g. 10.0.100.10:9080)
 - `objectserver`: This is the address of your _realm object server_. The previous guide in the root of this repository describes how to configure your _object server_, or you can find some information [here](https://realm.io/docs/realm-object-server/)
 
 _**Note**: the Android emulator doesn't like 127.0.0.1 addresses for servers running on the same box. Use 10.0.2.2 instead, see this [StackOverflow post](https://stackoverflow.com/questions/5806220/how-to-connect-to-my-http-localhost-web-server-from-android-emulator-in-eclips) for more info._
+
+It is **IMPORTANT** to **Clean project** after you finished the modifications of the config file.
 
 Now you are ready to **Build and Run** the example in **Android Studio**.
 
