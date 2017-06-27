@@ -37,7 +37,7 @@ This is where you can grab the Client ID parameter from:
 
 <img src="/.images/zerokit-idp-copy1.png" width="60%">
 
-In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitAPIBaseURL`, `ZeroKitClientId`, `ZeroKitAppBackend`, `RealmPort` and `RealmHost`:
+In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitServiceURL`, `ZeroKitClientId`, `ZeroKitAppBackend`, `RealmPort` and `RealmHost`:
 
 ```xml
 <key>RealmPort</key>
@@ -77,7 +77,7 @@ Browse to your Realm server's Realms list: http://localhost:9080/#!/realms and f
 
 <img src="/.images/realm-dashboard-realms.png" width="80%">
 
-Open Realm Object Browser, paste the Url into the Realm URL box and delete the highlighted part. Enter your Realm admin username & password and hit Open:
+Open Realm Object Browser, paste the URL into the Realm URL box and delete the highlighted part. Enter your Realm admin username & password and hit Open:
 
 <img src="/.images/realm-browser-login.png" width="40%">
 
@@ -85,7 +85,7 @@ Check out the Tasks collection inside the realm, it's end-to-end encrypted!
 
 <img src="/.images/realm-browser-e2ee.png" width="50%">
 
-You can now log out on the **Account** tab, create another test-user- user and share task lists with each other as in this video.
+You can now log out on the **Account** tab, create another test-user- user and share task lists with each other.
 The ZeroKit SDK seamlessly handles the encryption keys for the realms.
 
 ## How the app works?
