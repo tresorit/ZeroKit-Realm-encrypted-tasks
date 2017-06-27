@@ -12,13 +12,13 @@ User registration is a 3-step process that you initiate on the client device by 
 
 ```java
 adminApi.initReg(username, profileData).enqueue(respInitReg -> {
-    zerokit.register(respInitReg.getUserId(), respInitReg.getRegSessionId(), password.getBytes()).enqueue(respReg -> {
-        adminApi.finishReg(respInitReg.getUserId(), respReg.getRegValidationVerifier()).enqueue(aVoid -> {
+    zerokit.register(respInitReg.getUserId(), respInitReg.getRegSessionId(), password).enqueue(respReg -> {
+        adminApi.finishReg(respInitReg.getUserId(), respReg.getRegValidationVerifier()).enqueue(v -> {
             // Registration finished successfully you can now log in. See the next step.
             // Log in...
-        }, onFailAdminApi);
-    }, onFailZerokit);
-}, onFailAdminApi);
+        }, ...);
+    }, ...);
+}, ...);
 ```
 
 Check out the [Registration flow in the ZeroKit SDK's documentation](https://tresorit.com/zerokit/docs/Common_flows.html) for more information
