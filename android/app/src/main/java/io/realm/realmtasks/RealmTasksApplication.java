@@ -20,9 +20,6 @@ import android.app.Application;
 
 import com.tresorit.zerokit.AdminApi;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import io.realm.Realm;
 import io.realm.log.LogLevel;
 import io.realm.log.RealmLog;
@@ -32,15 +29,15 @@ public class RealmTasksApplication extends Application {
     public static final String HTTP = "http";
     public static final String REALM = "realm";
 
-    public static final String FORMAT1 = "%s://%s:%s/%s";
-    public static final String FORMAT2 = "%s://%s:%s/%s/%s";
+    public static final String FORMAT1 = "%s://%s/%s";
+    public static final String FORMAT2 = "%s://%s/%s/%s";
 
-    public static final String AUTH_URL = String.format(FORMAT1, HTTP, BuildConfig.OBJECT_SERVER_IP, BuildConfig.OBJECT_SERVER_PORT, "auth");
-    public static final String REALM_URL = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER_IP, BuildConfig.OBJECT_SERVER_PORT, "%s", "realmtasks");
-    public static final String REALM_URL_INVITES_PUBLIC = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER_IP, BuildConfig.OBJECT_SERVER_PORT, "%s","invites_public");
-    public static final String REALM_URL_INVITES_PRIVATE = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER_IP, BuildConfig.OBJECT_SERVER_PORT, "%s","invites_private");
-    public static final String REALM_URL_SHARE_PRIVATE = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER_IP, BuildConfig.OBJECT_SERVER_PORT, "%s","shares_private");
-    public static final String REALM_URL_PERMISSION = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER_IP, BuildConfig.OBJECT_SERVER_PORT, "%s","__permission");
+    public static final String AUTH_URL = String.format(FORMAT1, HTTP, BuildConfig.OBJECT_SERVER, "auth");
+    public static final String REALM_URL = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER, "%s", "realmtasks");
+    public static final String REALM_URL_INVITES_PUBLIC = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER, "%s", "invites_public");
+    public static final String REALM_URL_INVITES_PRIVATE = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER, "%s", "invites_private");
+    public static final String REALM_URL_SHARE_PRIVATE = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER, "%s", "shares_private");
+    public static final String REALM_URL_PERMISSION = String.format(FORMAT2, REALM, BuildConfig.OBJECT_SERVER, "%s", "__permission");
 
     public static final String REALM_URL_MY = String.format(REALM_URL, "~");
     public static final String REALM_URL_INVITES_PUBLIC_MY = String.format(REALM_URL_INVITES_PUBLIC, "~");
@@ -51,14 +48,7 @@ public class RealmTasksApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        try {
-            Properties properties = new Properties();
-            properties.load(getAssets().open("zerokit.properties"));
-            AdminApi.init(properties.getProperty("appbackend", ""), properties.getProperty("clientid", ""));
-        } catch (IOException e) {
-            throw new RuntimeException("Invalid config file");
-        }
-
+        AdminApi.init(BuildConfig.APP_BACKEND, BuildConfig.CLIENT_ID);
         Realm.init(this);
         RealmLog.setLevel(LogLevel.DEBUG);
     }

@@ -165,10 +165,12 @@ public class ShareListActivity extends BaseListenerActivity {
                                     zerokit.shareTresor(tresorId, zerokitUserIdInvited).enqueue(operationId ->
                                             adminApi.sharedTresor(operationId).enqueue(aVoid -> {
                                                 String realmUserIdInvited = new JSONObject(publicProfileInvited).getString(FIELD_REALMUSERID);
-                                                realm.executeTransaction(realm1 -> {
-                                                    if (realm1.where(User.class).equalTo(FIELD_REALMUSERID, realmUserIdInvited).count() == 0)
-                                                        realm1.insert(new User(realmUserIdInvited, zerokitUserIdInvited, userNameInvited));
-                                                });
+                                                try (Realm realmShare = Realm.getInstance(UserManager.getSyncConfigurationForShare())) {
+                                                    realmShare.executeTransaction(realm1 -> {
+                                                        if (realm1.where(User.class).equalTo(FIELD_REALMUSERID, realmUserIdInvited).count() == 0)
+                                                            realm1.insert(new User(realmUserIdInvited, zerokitUserIdInvited, userNameInvited));
+                                                    });
+                                                }
                                                 try (Realm realmManagement = SyncUser.currentUser().getManagementRealm()) {
                                                     realmManagement.executeTransaction(realm ->
                                                             realm.insert(new PermissionChange(REALM_URL_MY, realmUserIdInvited, true, true, false)));

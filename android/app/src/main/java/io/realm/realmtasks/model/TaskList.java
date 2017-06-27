@@ -33,7 +33,6 @@ public class TaskList extends RealmObject implements Completable {
 
     @PrimaryKey @Required
     private String id;
-    @Required
     private String tresorId;
     @Required
     private String text;
@@ -47,7 +46,7 @@ public class TaskList extends RealmObject implements Completable {
 
     public void setText(String text) {
         Response<String, ResponseZerokitError> execute = Zerokit.getInstance().encrypt(tresorId, text).execute();
-        this.text = execute.isError() ? text : execute.getResult();
+        this.text = execute.isError() ? "" : execute.getResult();
     }
 
     public boolean isCompleted() {
