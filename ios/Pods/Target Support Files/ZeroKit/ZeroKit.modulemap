@@ -1,0 +1,6 @@
+framework module ZeroKit {
+  umbrella header "ZeroKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

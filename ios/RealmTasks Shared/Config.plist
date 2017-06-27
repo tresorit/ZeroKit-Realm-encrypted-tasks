@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RealmPort</key>
+	<integer>9080</integer>
+	<key>RealmHost</key>
+	<string>{Your realm host, eg. IP address}</string>
+	<key>ZeroKitServiceURL</key>
+	<string>{Your ZeroKit Service URL}</string>
+	<key>ZeroKitClientId</key>
+	<string>{Your ZeroKit Client ID}</string>
+	<key>ZeroKitAppBackend</key>
+	<string>{Your ZeroKit Sample Backend URL}</string>
+</dict>
+</plist>
