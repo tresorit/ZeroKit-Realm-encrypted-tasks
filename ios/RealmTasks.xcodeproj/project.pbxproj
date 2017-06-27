@@ -32,8 +32,6 @@
 		E759B2A61EF8153C00AD28CF /* MySharesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759B2A51EF8153C00AD28CF /* MySharesViewController.swift */; };
 		E759B2A81EF81A5300AD28CF /* SharedListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759B2A71EF81A5300AD28CF /* SharedListsViewController.swift */; };
 		E7C58C561EEEC33D00E73782 /* ZeroKitAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C58C551EEEC33D00E73782 /* ZeroKitAuth.swift */; };
-		E7C58C611EEEC4FD00E73782 /* ZeroKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */; };
-		E7C58C621EEEC4FD00E73782 /* ZeroKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E7C58C671EEECA5F00E73782 /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C58C661EEECA5F00E73782 /* Backend.swift */; };
 		E7C58C691EEECB4600E73782 /* ZeroKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C58C681EEECB4600E73782 /* ZeroKitManager.swift */; };
 		E7C58C6D1EF0021800E73782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7C58C6C1EF0021800E73782 /* Main.storyboard */; };
@@ -45,23 +43,6 @@
 		FF0E3E58E9D099F7E36AAB6F /* Pods_RealmTasks_RealmTasks_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0F0C2CAF892AF7AD2EF7F65 /* Pods_RealmTasks_RealmTasks_iOS.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E7C58C5D1EEEC4EC00E73782 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E762F0601D9C193500170D9F;
-			remoteInfo = ZeroKit;
-		};
-		E7C58C631EEEC4FD00E73782 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E762F05F1D9C193500170D9F;
-			remoteInfo = ZeroKit;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		E7C58C651EEEC4FD00E73782 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -69,7 +50,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E7C58C621EEEC4FD00E73782 /* ZeroKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,8 +89,7 @@
 		E759B2A51EF8153C00AD28CF /* MySharesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySharesViewController.swift; sourceTree = "<group>"; };
 		E759B2A71EF81A5300AD28CF /* SharedListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedListsViewController.swift; sourceTree = "<group>"; };
 		E7C58C551EEEC33D00E73782 /* ZeroKitAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZeroKitAuth.swift; sourceTree = "<group>"; };
-		E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZeroKit.xcodeproj; path = ZeroKitSDK/ZeroKit.xcodeproj; sourceTree = "<group>"; };
-		E7C58C661EEECA5F00E73782 /* Backend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Backend.swift; path = ZeroKitSDK/Example/ZeroKitExample/Backend/Backend.swift; sourceTree = SOURCE_ROOT; };
+		E7C58C661EEECA5F00E73782 /* Backend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Backend.swift; path = "RealmTasks Shared/ZeroKit/Backend.swift"; sourceTree = SOURCE_ROOT; };
 		E7C58C681EEECB4600E73782 /* ZeroKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZeroKitManager.swift; sourceTree = "<group>"; };
 		E7C58C6C1EF0021800E73782 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		E7D720FE1EFBA01700C21691 /* ShareBaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareBaseTableViewController.swift; sourceTree = "<group>"; };
@@ -129,7 +108,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF0E3E58E9D099F7E36AAB6F /* Pods_RealmTasks_RealmTasks_iOS.framework in Frameworks */,
-				E7C58C611EEEC4FD00E73782 /* ZeroKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,18 +224,9 @@
 			path = ZeroKit;
 			sourceTree = "<group>";
 		};
-		E7C58C581EEEC4EC00E73782 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		E84CF2A81CBC408000082C1A = {
 			isa = PBXGroup;
 			children = (
-				E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */,
 				C23EB02B1D4634B700D3E0AC /* RealmTasks Shared */,
 				225201931D3DD648009E45FA /* RealmTasks iOS */,
 				E84CF2B21CBC408000082C1A /* Products */,
@@ -294,7 +263,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E7C58C641EEEC4FD00E73782 /* PBXTargetDependency */,
 			);
 			name = "RealmTasks iOS";
 			productName = RealmTasks;
@@ -334,28 +302,12 @@
 			mainGroup = E84CF2A81CBC408000082C1A;
 			productRefGroup = E84CF2B21CBC408000082C1A /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E7C58C581EEEC4EC00E73782 /* Products */;
-					ProjectRef = E7C58C571EEEC4EC00E73782 /* ZeroKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				E84CF2B01CBC408000082C1A /* RealmTasks iOS */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		E7C58C5E1EEEC4EC00E73782 /* ZeroKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ZeroKit.framework;
-			remoteRef = E7C58C5D1EEEC4EC00E73782 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E84CF2AF1CBC408000082C1A /* Resources */ = {
@@ -486,14 +438,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E7C58C641EEEC4FD00E73782 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ZeroKit;
-			targetProxy = E7C58C631EEEC4FD00E73782 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		225201961D3DD648009E45FA /* LaunchScreen.storyboard */ = {

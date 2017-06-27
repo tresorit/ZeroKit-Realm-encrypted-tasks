@@ -14,12 +14,14 @@ PODS:
     - Realm (= 2.7.0)
   - SwiftLint (0.16.1)
   - TORoundedTableView (0.1.2)
+  - ZeroKit (4.1.2)
 
 DEPENDENCIES:
   - Cartography (~> 1.0.1)
   - RealmLoginKit
   - RealmSwift (= 2.7.0)
   - SwiftLint (= 0.16.1)
+  - ZeroKit (= 4.1.2)
 
 SPEC CHECKSUMS:
   Cartography: c1460e99395b824d9d75360b0382faeb0b33dcd7
@@ -28,7 +30,8 @@ SPEC CHECKSUMS:
   RealmSwift: 6d06425d3900c86473c4f323bf6949b43fca22bc
   SwiftLint: b8b683208cc09640898f16318a7a452274e91f61
   TORoundedTableView: 31217495487ec13b9a2750b36e3e49223b0f23cb
+  ZeroKit: f145810c446398c3f2e290a4f72f449e7c1c5079
 
-PODFILE CHECKSUM: c313a1712baab1d71bea90b224044a18fd10cdb1
+PODFILE CHECKSUM: 18502c8ed7921211a081acd37cedf364c63a47c4
 
 COCOAPODS: 1.2.1

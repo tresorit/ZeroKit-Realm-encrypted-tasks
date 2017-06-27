@@ -1,6 +1,7 @@
 excluded:
   - Pods
   - ZeroKitSDK
+  - RealmTasks Shared/ZeroKit
 line_length: 160
 disabled_rules:
   - force_cast
