@@ -164,7 +164,8 @@ If you're past this, you deserve one more tap on the shoulder, we're almost ther
     }
   }
   ```
-  
+
+  **Note**: if you're deploying this on a Mac and would like to test it with Android, use http://10.0.0.2 instead of http://127.0.0.1 as `_baseUrl_` in the config file above. [For more information, see this Stackoverflow thread](https://stackoverflow.com/questions/9808560/why-do-we-use-10-0-2-2-to-connect-to-local-web-server-instead-of-using-computer).  
 When you saved the config file, open a console and cd into the root of the NodeJS repo
 
 * First, install it:
