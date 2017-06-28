@@ -52,6 +52,9 @@ In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitAPIBaseU
 <string>This is your ZeroKit node backend http://127.0.0.1:3000</string>
 ```
 
+  **Note**: even though you set up your ZeroKit backend with the http://10.0.0.2 ZeroKit backend Url, you should still refer to it as http://127.0.0.1 in your iPhone app's config file. The iOS emulator won't work with the 10.0.2.2 IP addresses. Yes, the beauties of multi-platform development...
+  
+
 # Step 3: Test-drive the app
 
 You are now ready to **Build and Run** (**⌘R**) the app in Xcode!
