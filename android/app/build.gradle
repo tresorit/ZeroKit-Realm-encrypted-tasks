@@ -26,6 +26,7 @@ android {
             buildConfigField "String", "OBJECT_SERVER", "\"" +props.getProperty("objectserver") + "\""
             buildConfigField "String", "CLIENT_ID", "\"" +props.getProperty("clientid") + "\""
             buildConfigField "String", "APP_BACKEND", "\"" +props.getProperty("appbackend") + "\""
+            manifestPlaceholders = [BASE_URL: props.getProperty("baseurl")]
         }
         debug {
         }
@@ -54,16 +55,4 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-}
-
-
-android.applicationVariants.all { variant ->
-    variant.outputs.each { output ->
-        output.processManifest.doLast {
-            def manifestOutFile = output.processManifest.manifestOutputFile
-            def newFileContents = manifestOutFile.getText('UTF-8').replaceAll("<meta-data[^>]*?android:name=\"com\\.tresorit\\.zerokitsdk\\.API_ROOT\"[^>]*>",
-                    "<meta-data android:name=\"com.tresorit.zerokitsdk.API_ROOT\" android:value=\""+ props.getProperty("baseurl") +"\"/>")
-            manifestOutFile.write(newFileContents, 'UTF-8')
-        }
-    }
 }

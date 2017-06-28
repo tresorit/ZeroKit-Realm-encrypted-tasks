@@ -58,8 +58,6 @@ objectserver=ip with port of your object server (e.g. 10.0.100.10:9080)
 
 _**Note**: the Android emulator doesn't like 127.0.0.1 addresses for servers running on the same box. Use 10.0.2.2 instead, see this [StackOverflow post](https://stackoverflow.com/questions/5806220/how-to-connect-to-my-http-localhost-web-server-from-android-emulator-in-eclips) for more info._
 
-It is **IMPORTANT** to **Clean project** after you finished the modifications of the config file.
-
 Now you are ready to **Build and Run** the example in **Android Studio**.
 
 #### Step 3: Test-drive the app

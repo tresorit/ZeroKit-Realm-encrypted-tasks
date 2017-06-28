@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.tresorit.zerokitsdk.API_ROOT"
-            android:value="@string/zerokit_root_url"/>
+            android:value="${BASE_URL}"/>
 
         <activity
             android:name=".SignInActivity"
