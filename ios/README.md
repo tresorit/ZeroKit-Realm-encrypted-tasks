@@ -43,13 +43,13 @@ In the `RealmTasks Shared/Config.plist` file set the values for `ZeroKitAPIBaseU
 <key>RealmPort</key>
 <integer>9080</integer>
 <key>RealmHost</key>
-<string>Your realm host, eg. 10.0.2.2</string>
+<string>Your realm host, eg. 127.0.0.1</string>
 <key>ZeroKitServiceURL</key>
 <string>This is your Service URL https://abcde12345.api.tresorit.io</string>
 <key>ZeroKitClientId</key>
 <string>This is your Client ID abcde12345_fghij67890</string>
 <key>ZeroKitAppBackend</key>
-<string>This is your ZeroKit node backend http://10.0.2.2:3000</string>
+<string>This is your ZeroKit node backend http://127.0.0.1:3000</string>
 ```
 
 # Step 3: Test-drive the app
