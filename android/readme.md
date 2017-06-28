@@ -47,7 +47,8 @@ appbackend=URL of your ZeroKit Node backend, by default it's http://10.0.2.2:300
 objectserver=IP of your ROS with port, by default it's 10.0.2.2:9080 - see Note below
 ```
 
-* **Note**: the Android emulator doesn't like 127.0.0.1 addresses for servers running on the same box. Use 10.0.2.2 instead; see this StackOverflow post for more info.
+  **Note**: the Android emulator doesn't like 127.0.0.1 addresses for servers running on the same box. Use 10.0.2.2 instead. [For more information, see this Stackoverflow thread](https://stackoverflow.com/questions/9808560/why-do-we-use-10-0-2-2-to-connect-to-local-web-server-instead-of-using-computer).
+
 
 ## Step 3: Test-drive the app
 Choose one of the latest emulator devices, for example **Google's Pixel XL**, and run the app:
