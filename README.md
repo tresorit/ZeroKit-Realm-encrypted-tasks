@@ -1,3 +1,6 @@
+**Notice:** This project is discontinued and no longer maintained nor supported by Tresorit. This repository only exists for archival purposes.
+***
+
 # E2EE Realm Backend Setup
 Follow these instructions to set up your End-to-End Encrypted Realm solution's backend components. 
 
